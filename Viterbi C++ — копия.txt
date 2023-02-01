@@ -1,0 +1,116 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+
+const int N = 9; // Number of states
+const int M = 5; // Number of observations
+
+// Viterbi algorithm function
+std::vector<int> viterbi(const std::vector<std::vector<double>>& transition_prob,
+                         const std::vector<std::vector<double>>& emission_prob,
+                         const std::vector<int>& observations)
+{
+    std::vector<std::vector<double>> v(observations.size(), std::vector<double>(N));
+    std::vector<std::vector<int>> path(observations.size(), std::vector<int>(N));
+
+    // Initialize base case
+    for (int i = 0; i < N; i++) {
+        v[0][i] = 1.0 / N; // Initial probabilities are equal
+    }
+
+    // Run Viterbi for t > 0
+    for (int t = 1; t < observations.size(); t++) {
+        for (int j = 0; j < N; j++) {
+            double max_prob = 0.0;
+            int max_state = 0;
+            for (int i = 0; i < N; i++) {
+                double prob = v[t-1][i] * transition_prob[i][j] * emission_prob[j][observations[t]];
+                if (prob > max_prob) {
+                    max_prob = prob;
+                    max_state = i;
+                }
+            }
+            v[t][j] = max_prob;
+            path[t][j] = max_state;
+        }
+    }
+
+    // Find the most likely final state
+    double max_prob = 0.0;
+    int final_state = 0;
+    for (int i = 0; i < N; i++) {
+        if (v[observations.size()-1][i] > max_prob) {
+            max_prob = v[observations.size()-1][i];
+            final_state = i;
+        }
+    }
+
+    // Backtrack to find the most likely sequence of states
+    std::vector<int> states(observations.size());
+    states[observations.size()-1] = final_state;
+    for (int t = observations.size()-2; t >= 0; t--) {
+        states[t] = path[t+1][states[t+1]];
+    }
+
+    return states;
+}
+
+int main()
+{
+    // Example of transition probabilities
+    std::vector<std::vector<double>> transition_prob = { 
+        {0.7, 0.3, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0},
+        {0.0, 0.6, 0.4, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0},
+        {0.0, 0.0, 0.5, 0.5, 0.0, 0.0, 0.0, 0.0, 0.0},
+        {0.0, 0.0, 0.0, 0.8, 0.2, 0.0, 0.0, 0.0, 0.0},
+        {0.0, 0.0, 0.0, 0.0, 0.7, 0.3, 0.0, 0.0, 0.0},
+        {0.0, 0.0, 0.0, 0.0, 0.0, 0.6, 0.4, 0.0, 0.0},
+        {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.5, 0.5, 0.0},
+        {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.8, 0.2},
+        {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0}
+    };
+    // Example of emission probabilities
+    std::vector<std::vector<double>> emission_prob = {
+        {0.9, 0.1, 0.0, 0.0, 0.0},
+        {0.0, 0.9, 0.1, 0.0, 0.0},
+        {0.0, 0.0, 0.8, 0.2, 0.0},
+        {0.0, 0.0, 0.0, 0.7, 0.3},
+        {0.0, 0.0, 0.0, 0.0, 1.0},
+        {0.0, 0.0, 0.0, 0.0, 0.0},
+        {0.0, 0.0, 0.0, 0.0, 0.0},
+        {0.0, 0.0, 0.0, 0.0, 0.0},
+        {0.0, 0.0, 0.0, 0.0, 0.0}
+    };
+    std::vector<int> observations = {0, 1, 2, 3, 4};
+    std::vector<int> states = viterbi(transition_prob, emission_prob, observations);
+    std::cout << "Most likely sequence of states: [";
+    for (int i = 0; i < states.size(); i++) {
+        std::cout << states[i] << " ";
+    }
+    std::cout << "]" << std::endl;
+    
+    return 0;
+}
+
+
+
+
+Этот код является реализацией алгоритма Витерби, алгоритма динамического программирования, используемого для определения наиболее вероятной последовательности скрытых состояний с учетом последовательности наблюдений.
+
+Основной функцией этого кода является функция viterbi(), которая принимает в качестве входных данных три вектора: transition_prob, emission_prob и observations.
+
+transition_prob - это 2D-вектор, представляющий вероятности перехода между состояниями. В частности, вход transition_prob[i][j] представляет вероятность перехода из состояния i в состояние j. emission_prob представляет собой 2D вектор, представляющий вероятности излучения, в частности, вход emission_prob[i][j] представляет вероятность излучения наблюдения j, когда в состоянии i.
+наблюдения представляют собой 1D вектор, представляющий наблюдения.
+
+Функция viterbi() сначала инициализирует 2D-вектор v и 2D-векторный путь для хранения вероятностей и пути алгоритма.
+Затем он инициализирует базовый вариант, где начальные вероятности устанавливаются равными для всех состояний.
+
+Затем алгоритм запускает алгоритм Витерби для t > 0, где t - шаг по времени.
+Он использует два вложенных цикла, один для текущего состояния j и один для предыдущего состояния i.
+Для каждого состояния j и i он вычисляет вероятность нахождения в состоянии j на временном шаге t и перехода из состояния i на временном шаге t-1 и выдачи наблюдения на временном шаге t.
+Затем он соответствующим образом обновляет вектор v и вектор пути, сохраняя максимальную вероятность и соответствующее предыдущее состояние для каждого состояния.
+
+После циклов функция находит наиболее вероятное конечное состояние, находя состояние с максимальной вероятностью на последнем временном шаге.
+Затем он возвращается назад по вектору пути, чтобы найти наиболее вероятную последовательность состояний.
+
+Наконец, код в основной функции задает вероятности перехода и излучения, а также наблюдения и вызывает функцию viterbi(), чтобы получить наиболее вероятную последовательность состояний, которая затем распечатывается.

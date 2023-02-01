@@ -1,0 +1,126 @@
+#include <iostream>
+#include <queue>
+#include <ctime>
+
+using namespace std;
+
+struct QueueNode {
+    int data;
+    QueueNode* next;
+
+    QueueNode(int d) : data(d), next(nullptr) {}
+};
+
+class Queue {
+public:
+    QueueNode* head;
+    QueueNode* tail;
+    int size;
+
+public:
+    Queue() : head(nullptr), tail(nullptr), size(0) {}
+
+    void enqueue(int data) {
+        QueueNode* newNode = new QueueNode(data);
+        if (tail == nullptr) {
+            head = newNode;
+            tail = newNode;
+        } else {
+            tail->next = newNode;
+            tail = newNode;
+        }
+        size++;
+    }
+
+    int dequeue() {
+        if (head == nullptr) {
+            return -1;
+        }
+
+        int data = head->data;
+        QueueNode* temp = head;
+        head = head->next;
+        if (head == nullptr) {
+            tail = nullptr;
+        }
+        delete temp;
+        size--;
+        return data;
+    }
+
+    int getSize() {
+        return size;
+    }
+
+    bool isEmpty() {
+        return size == 0;
+    }
+};
+
+void binaryInsertionSort(Queue& queue) {
+    if (queue.getSize() <= 1) {
+        return;
+    }
+
+    int operationCount = 0;
+    QueueNode* curr = queue.head->next;
+    while (curr != nullptr) {
+        int data = curr->data;
+        QueueNode* prev = queue.head;
+        int left = 0;
+        int right = queue.getSize() - 1;
+        while (left < right) {
+            int mid = left + (right - left) / 2;
+            QueueNode* midNode = queue.head;
+            for (int i = 0; i < mid; i++) {
+                midNode = midNode->next;
+            }
+            if (midNode->data < data) {
+                left = mid + 1;
+            } else {
+                right = mid;
+            }
+            operationCount++;
+        }
+
+        for (int i = 0; i < left; i++) {
+            prev = prev->next;
+        }
+
+        QueueNode* newNode = new QueueNode(data);
+        newNode->next = prev->next;
+        prev->next = newNode;
+        curr = curr->next;
+        operationCount++;
+    }
+
+    cout << "Количество операций: " << operationCount << endl;
+}
+
+int main() {
+    Queue queue;
+
+    // Read number of sorting items from console
+    int numItems;
+    cout << "Введите количество элементов для сортировки: ";
+    cin >> numItems;
+
+    // Generate random numbers and add them to the queue
+    srand(time(nullptr));
+    for (int i = 0; i < numItems; i++) {
+        int num = rand() % numItems;
+        queue.enqueue(num);
+    }
+    // Start timer
+    clock_t start = clock();
+
+    // Sort the queue using binary insertion sort
+    binaryInsertionSort(queue);
+
+    // End timer
+    clock_t end = clock();
+
+    // Print execution time
+    cout << endl << "Время выполнения: " << (double)(end - start) / CLOCKS_PER_SEC << " seconds" << endl;
+    return 0;
+}

@@ -1,0 +1,152 @@
+use std::io;
+
+fn main() {
+  loop {
+    println!("Welcome to the Secret Santa web service!");
+    println!("Please select an option:");
+    println!("1. Create a group");
+    println!("2. Join a group");
+    println!("3. Assign an administrator");
+    println!("4. Remove administrator's authority");
+    println!("5. Leave a group");
+    println!("6. Delete a group");
+    println!("7. Assign Secret Santas");
+    println!("8. Request Secret Santa assignment");
+
+    let mut input = String::new();
+    io::stdin().read_line(&mut input).unwrap();
+    let input: u32 = input.trim().parse().unwrap();
+
+    match input {
+        1 => create_group(),
+        2 => join_group(),
+        3 => assign_administrator(),
+        4 => remove_administrator(),
+        5 => leave_group(),
+        6 => delete_group(),
+        7 => assign_secret_santas(),
+        8 => request_secret_santa_assignment(),
+        _ => println!("Invalid option"),
+    }
+  }
+}
+
+fn create_group() {
+    // code to create a group
+    println!("Enter the name of the group:");
+
+    let mut group_name = String::new();
+    io::stdin().read_line(&mut group_name).unwrap();
+    let group_name = group_name.trim();
+
+    // send request to web service to create group
+    println!("Group {} created successfully!", group_name);
+}
+
+fn join_group() {
+    // code to join a group
+    println!("Enter the name of the group:");
+
+    let mut group_name = String::new();
+    io::stdin().read_line(&mut group_name).unwrap();
+    let group_name = group_name.trim();
+
+    println!("Enter your name:");
+
+    let mut user_name = String::new();
+    io::stdin().read_line(&mut user_name).unwrap();
+    let user_name = user_name.trim();
+
+    // send request to web service to join group
+    println!("{} joined group {} successfully!", user_name, group_name);
+}
+
+fn assign_administrator() {
+    // code to assign an administrator
+    println!("Enter the name of the group:");
+
+    let mut group_name = String::new();
+    io::stdin().read_line(&mut group_name).unwrap();
+    let group_name = group_name.trim();
+
+    println!("Enter the name of the user to assign as administrator:");
+
+    let mut user_name = String::new();
+    io::stdin().read_line(&mut user_name).unwrap();
+    let user_name = user_name.trim();
+
+    // send request to web service to assign administrator
+    println!("{} was successfully assigned as administrator of group {}!", user_name, group_name);
+}
+
+fn remove_administrator() {
+    // code to remove administrator's authority
+    println!("Enter the name of the group:");
+
+    let mut group_name = String::new();
+    io::stdin().read_line(&mut group_name).unwrap();
+    let group_name = group_name.trim();
+
+    println!("Enter the name of the administrator to remove:");
+
+    let mut user_name = String::new();
+    io::stdin().read_line(&mut user_name).unwrap();
+    let user_name = user_name.trim();
+
+    // send request to web service to remove administrator's authority
+    println!("{}'s administrator authority was successfully removed in group {}!", user_name, group_name);
+}
+
+fn leave_group() {
+    // code to leave a group
+    println!("Enter the name of the group:");
+
+    let mut group_name = String::new();
+    io::stdin().read_line(&mut group_name).unwrap();
+    let group_name = group_name.trim();
+
+    println!("Enter your name:");
+
+    let mut user_name = String::new();
+    io::stdin().read_line(&mut user_name).unwrap();
+    let user_name = user_name.trim();
+
+    // send request to web service to leave group
+    println!("{} left group {} successfully!", user_name, group_name);
+}
+
+fn delete_group() {
+    // code to delete a group
+    println!("Enter the name of the group:");
+
+    let mut group_name = String::new();
+    io::stdin().read_line(&mut group_name).unwrap();
+    let group_name = group_name.trim();
+
+    // send request to web service to delete group
+    println!("Group {} was successfully deleted!", group_name);
+}
+
+fn assign_secret_santas() {
+    // code to assign Secret Santas
+    println!("Enter the name of the group:");
+
+    let mut group_name = String::new();
+    io::stdin().read_line(&mut group_name).unwrap();
+    let group_name = group_name.trim();
+
+    // send request to web service to assign Secret Santas
+    println!("Secret Santas successfully assigned for group {}!", group_name);
+}
+
+fn request_secret_santa_assignment() {
+    // code to request Secret Santa assignment
+    println!("Enter your name:");
+
+    let mut user_name = String::new();
+    io::stdin().read_line(&mut user_name).unwrap();
+    let user_name = user_name.trim();
+
+    // send request to web service to request Secret Santa assignment
+    println!("Secret Santa assignment for {}: [ASSIGNMENT]", user_name);
+}

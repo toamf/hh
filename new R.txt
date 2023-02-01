@@ -1,0 +1,49 @@
+pisa <- readRDS("/kaggle/input/323122/pisa.rds")
+
+# select specific variables for analysis
+pisa_subset <- select(pisa, PV10READ, PV10MATH, starts_with("ST038"))
+
+# replace specific values with NA
+pisa_subset <- pisa_subset %>% 
+  mutate_at(vars(starts_with("ST038")), list(~ replace(., . %in% c(5,7,8,9), NA)))
+
+# drop missing values
+pisa_subset <- na.omit(pisa_subset)
+
+# create an aggregated variable for bullying
+pisa_subset <- mutate(pisa_subset, bullying = rowMeans(select(pisa_subset,starts_with("ST038")),na.rm = T))
+
+# create a variable bul_stat
+pisa_subset$bul_stat <- ifelse(pisa_subset$bullying > mean(pisa_subset$bullying,na.rm = T), 1, 0)
+
+# compare the average score in mathematics and reading 
+pisa_agg_avg <- pisa_subset %>% 
+  group_by(bul_stat) %>% 
+  summarize(math_avg = mean(PV10MATH,na.rm = T),
+            reading_avg = mean(PV10READ,na.rm = T))
+
+#calculate descriptive statistics on the bullying variable
+library(psych)
+describe(pisa_subset$bullying)
+
+# final output
+pisa_agg_avg
+
+
+
+
+Код считывается из файла с именем "pisa.rds" с использованием функции readRDS, которая является частью языка программирования R. Он присваивает содержимое файла переменной с именем "pisa".
+
+Затем код выбирает конкретные переменные из набора данных "pisa" для дальнейшего анализа и присваивает их новой переменной "pisa_subset". Выбранными переменными являются PV10READ, PV10MATH и все переменные, начинающиеся с "ST038", с использованием функции "starts_with()" и функции "select()".
+
+После этого он использует функцию "mutate_at" для замены определенных значений в переменных "starts_with("ST038")" на NA (отсутствующие значения). Функция "mutate_at()" используется для применения функции к определенным переменным в наборе данных, а функция "replace()" используется для замены определенных значений новыми значениями.
+
+Затем код удаляет недостающие значения из набора данных, используя функцию "na.omit" из базового пакета R. Этот шаг важен, чтобы избежать любых проблем, вызванных отсутствующими значениями в наборе данных.
+
+Далее код создает новую переменную под названием "bullying", которая является средним значением переменных "starts_with("ST038")", используя функцию "rowMeans()" и функцию "mutate()". Функция "rowMeans()" используется для вычисления среднего значения выбранных переменных, а функция "mutate()" используется для создания новой переменной.
+
+Затем код создает новую переменную с именем "bul_stat", которая представляет собой двоичную переменную, указывающую, подвергался ли ученик издевательствам или нет, на основе среднего значения переменной "bullying". Функция "ifelse()" используется для создания этой переменной, она присваивает значение 1, если ученик подвергался издевательствам, и 0, если ученик не подвергался издевательствам.
+
+Затем код группирует данные по переменной "bul_stat" и вычисляет среднее значение для переменных "PV10MATH" и "PV10READ" и присваивает его переменной "pisa_agg_avg". Функция "group_by()" используется для группировки данных по переменной "bul_stat", а функция "summary()" используется для вычисления среднего значения для переменных "PV10MATH" и "PV10READ".
+
+Код загружает библиотеку psych и вычисляет описательную статистику по переменной bullying, используя функцию "describe()" из пакета psych. Наконец, код выводит конечный результат, который является переменной "pisa_agg_avg".

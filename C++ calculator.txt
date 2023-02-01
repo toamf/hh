@@ -1,0 +1,285 @@
+#include <cmath>
+#include <cstdlib>
+#include <iostream>
+
+class ArbitraryBitArithmetic {
+public:
+    struct Fraction {
+        long long numerator;
+        long long denominator;
+    };
+
+    // convert a double to a fraction
+    Fraction toFraction(double x) {
+        Fraction result;
+        result.denominator = 1;
+        while (x != (int)x) {
+            x *= 10;
+            result.denominator *= 10;
+        }
+        result.numerator = (int)x;
+        return result;
+    }
+
+    // add two fractions
+    Fraction add(Fraction f1, Fraction f2) {
+        Fraction result;
+        result.denominator = f1.denominator * f2.denominator;
+        result.numerator = f1.numerator * f2.denominator + f2.numerator * f1.denominator;
+        return result;
+    }
+
+    // subtract two fractions
+    Fraction subtract(Fraction f1, Fraction f2) {
+        Fraction result;
+        result.denominator = f1.denominator * f2.denominator;
+        result.numerator = f1.numerator * f2.denominator - f2.numerator * f1.denominator;
+        return result;
+    }
+
+    // multiply two fractions
+    Fraction multiply(Fraction f1, Fraction f2) {
+        Fraction result;
+        result.denominator = f1.denominator * f2.denominator;
+        result.numerator = f1.numerator * f2.numerator;
+        return result;
+    }
+
+    // divide two fractions
+    Fraction divide(Fraction f1, Fraction f2) {
+        Fraction result;
+        result.denominator = f1.denominator * f2.numerator;
+        result.numerator = f1.numerator * f2.denominator;
+        return result;
+    }
+
+    // calculate modulo
+    int modulo(int x, int y) {
+        return x % y;
+    }
+
+    // raise a fraction to a positive integer power
+    Fraction exponentiate(Fraction f, int n) {
+        Fraction result;
+        result.numerator = 1;
+        result.denominator = 1;
+        for (int i = 0; i < n; i++) {
+            result = multiply(result, f);
+        }
+        return result;
+    }
+
+public:
+    // perform addition
+    double add(double x, double y) {
+        Fraction f1 = toFraction(x);
+        Fraction f2 = toFraction(y);
+        return (add(f1, f2).numerator / (double)add(f1, f2).denominator);
+    }
+
+    // perform subtraction
+    double subtract(double x, double y) {
+        Fraction f1 = toFraction(x);
+        Fraction f2 = toFraction(y);
+        return (subtract(f1, f2).numerator / (double)subtract(f1, f2).denominator);
+    }
+
+    // perform multiplication
+    double multiply(double x, double y) {
+        Fraction f1 = toFraction(x);
+        Fraction f2 = toFraction(y);
+        return (multiply(f1, f2).numerator / (double)multiply(f1, f2).denominator);
+    }
+
+    // perform division
+    double divide(double x, double y) {
+        Fraction f1 = toFraction(x);
+        Fraction f2 = toFraction(y);
+        return (divide(f1, f2).numerator / (double)divide(f1, f2).denominator);
+    }
+
+    // perform modulo
+    int fmod(int x, int y) {
+        return modulo(x, y);
+    }
+
+    // perform exponentiation
+    double exponentiate(double x, int n) {
+        Fraction f = toFraction(x);
+        return (exponentiate(f, n).numerator / (double)exponentiate(f, n).denominator);
+    }
+
+    // perform trigonometric functions
+    double sin(double x) {
+        return std::sin(x);
+    }
+
+    double cos(double x) {
+        return std::cos(x);
+    }
+
+    double tan(double x) {
+        return std::tan(x);
+    }
+
+    double asin(double x) {
+        return std::asin(x);
+    }
+
+    double acos(double x) {
+        return std::acos(x);
+    }
+
+    double atan(double x) {
+        return std::atan(x);
+    }
+
+    double atan2(double y, double x) {
+        return std::atan2(y, x);
+    }
+
+    // perform logarithmic functions
+    double log(double x) {
+        return std::log(x);
+    }
+
+    double log10(double x) {
+        return std::log10(x);
+    }
+};
+
+int main() {
+    ArbitraryBitArithmetic calculator;
+
+    std::cout << "Добро пожаловать в арифметический калькулятор!" << std::endl;
+    std::cout << "Введите число, чтобы выбрать операцию:" << std::endl;
+    std::cout << "1. Cложение" << std::endl;
+    std::cout << "2. Вычитание" << std::endl;
+    std::cout << "3. Умножение" << std::endl;
+    std::cout << "4. Деление" << std::endl;
+    std::cout << "5. По модулю" << std::endl;
+    std::cout << "6. Возведение в степень" << std::endl;
+    std::cout << "7. Тригонометрические функции" << std::endl;
+    std::cout << "8. Логарифмические функции" << std::endl;
+    std::cout << "Введите любой другой номер, чтобы выйти." << std::endl;
+
+    int choice;
+    std::cin >> choice;
+
+    while (choice >= 1 && choice <= 8) {
+        if (choice == 1) {
+            double x, y;
+            std::cout << "Введите два числа для сложения: ";
+            std::cin >> x >> y;
+            std::cout << "Результат: " << calculator.add(x, y) << std::endl;
+        } else if (choice == 2) {
+            double x, y;
+            std::cout << "Введите два числа для вычитания: ";
+            std::cin >> x >> y;
+            std::cout << "Результат: " << calculator.subtract(x, y) << std::endl;
+        } else if (choice == 3) {
+            double x, y;
+            std::cout << "Введите два числа для умножения: ";
+            std::cin >> x >> y;
+            std::cout << "Результат: " << calculator.multiply(x, y) << std::endl;
+        } else if (choice == 4) {
+            double x, y;
+            std::cout << "Введите два числа для деления: ";
+            std::cin >> x >> y;
+            std::cout << "Результат: " << calculator.divide(x, y) << std::endl;
+        } else if (choice == 5) {
+            int x, y;
+            std::cout << "Введите два числа для вычисления по модулю: ";
+            std::cin >> x >> y;
+            std::cout << "Результат: " << calculator.modulo(x, y) << std::endl;
+        } else if (choice == 6) {
+            double x;
+            int y;
+            std::cout << "Введите число и целочисленную степень, чтобы увеличить его до: ";
+            std::cin >> x >> y;
+            std::cout << "Результат: " << calculator.exponentiate(x, y) << std::endl;
+        } else if (choice == 7) {
+            std::cout << "Введите число, чтобы выбрать тригонометрическую функцию:" << std::endl;
+            std::cout << "1. Синус" << std::endl;
+            std::cout << "2. Косинус" << std::endl;
+            std::cout << "3. Тангенс" << std::endl;
+            std::cout << "4. Арксинус" << std::endl;
+            std::cout << "5. Арккосинус" << std::endl;
+            std::cout << "6. Арктангенс" << std::endl;
+            std::cout << "7. Арктангенс с двумя аргументами" << std::endl;
+            int function;
+            std::cin >> function;
+            if (function == 1) {
+                double x;
+                std::cout << "Введите число, чтобы найти его синус: ";
+                std::cin >> x;
+                std::cout << "Результат: " << calculator.sin(x) << std::endl;
+            } else if (function == 2) {
+                double x;
+                std::cout << "Введите число, чтобы найти его косинус: ";
+                std::cin >> x;
+                std::cout << "Результат: " << calculator.cos(x) << std::endl;
+            } else if (function == 3) {
+                double x;
+                std::cout << "Введите число, чтобы найти его тангенс: ";
+                std::cin >> x;
+                std::cout << "Результат: " << calculator.tan(x) << std::endl;
+            } else if (function == 4) {
+                double x;
+                std::cout << "Введите число, чтобы найти его арксинус: ";
+                std::cin >> x;
+                std::cout << "Результат: " << calculator.asin(x) << std::endl;
+            } else if (function == 5) {
+                double x;
+                std::cout << "Введите число, чтобы найти его арккосинус: ";
+                std::cin >> x;
+                std::cout << "Результат: " << calculator.acos(x) << std::endl;
+            } else if (function == 6) {
+                double x;
+                std::cout << "Введите число, чтобы найти его арктангенс: ";
+                std::cin >> x;
+                std::cout << "Результат: " << calculator.atan(x) << std::endl;
+            } else if (function == 7) {
+                double x, y;
+                std::cout << "Введите два числа, чтобы найти арктангенс к их отношению: ";
+                std::cin >> x >> y;
+                std::cout << "Результат: " << calculator.atan2(x, y) << std::endl;
+            }
+        } else if (choice == 8) {
+            std::cout << "Введите число, чтобы выбрать логарифмическую функцию:" << std::endl;
+            std::cout << "1. Натуральный логарифм" << std::endl;
+            std::cout << "2. Логарифм с основанием 10" << std::endl;
+            int function;
+            std::cin >> function;
+            if (function == 1) {
+                double x;
+                std::cout << "Введите число, чтобы найти его натуральный логарифм: ";
+                std::cin >> x;
+                std::cout << "Результат: " << calculator.log(x) << std::endl;
+            } else if (function == 2) {
+                double x;
+                std::cout << "Введите число, чтобы найти его основание-логарифм 10: ";
+                std::cin >> x;
+                std::cout << "Результат: " << calculator.log10(x) << std::endl;
+            }
+        }
+
+    	std::cout << "Введите число, чтобы выбрать операцию:" << std::endl;
+    	std::cout << "1. Cложение" << std::endl;
+    	std::cout << "2. Вычитание" << std::endl;
+    	std::cout << "3. Умножение" << std::endl;
+    	std::cout << "4. Деление" << std::endl;
+    	std::cout << "5. По модулю" << std::endl;
+    	std::cout << "6. Возведение в степень" << std::endl;
+    	std::cout << "7. Тригонометрические функции" << std::endl;
+    	std::cout << "8. Логарифмические функции" << std::endl;
+    	std::cout << "Введите любой другой номер, чтобы выйти." << std::endl;
+
+        std::cin >> choice;
+    }
+
+    std::cout << "Благодарим вас за использование арифметического калькулятора!" << std::endl;
+
+    return 0;
+}
+

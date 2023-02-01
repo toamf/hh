@@ -1,0 +1,53 @@
+#include <iostream>
+
+// Function overload to handle different types
+double add(double a, double b) {
+    return a + b;
+}
+int add(int a, int b) {
+    return a + b;
+}
+
+// Template function to handle different types
+template <typename T>
+T subtract(T a, T b) {
+    return a - b;
+}
+template <typename T>
+T multiply(T a, T b) {
+    return a * b;
+}
+template <typename T>
+T divide(T a, T b) {
+    return a / b;
+}
+
+int main() {
+    double num1, num2;
+    char operation;
+
+    std::cout << "Enter the first number: ";
+    std::cin >> num1;
+    std::cout << "Enter the second number: ";
+    std::cin >> num2;
+    std::cout << "Enter the operation (+, -, *, /): ";
+    std::cin >> operation;
+
+    if (operation == '+') {
+        std::cout << num1 << " + " << num2 << " = " << add(num1, num2) << std::endl;
+    } else if (operation == '-') {
+        std::cout << num1 << " - " << num2 << " = " << subtract(num1, num2) << std::endl;
+    } else if (operation == '*') {
+        std::cout << num1 << " * " << num2 << " = " << multiply(num1, num2) << std::endl;
+    } else if (operation == '/') {
+        if(num2 == 0) {
+            std::cout << "division by zero is not allowed " << std::endl;
+        } else {
+        std::cout << num1 << " / " << num2 << " = " << divide(num1, num2) << std::endl;
+        }
+    } else {
+        std::cout << "Invalid operator" << std::endl;
+    }
+
+    return 0;
+}

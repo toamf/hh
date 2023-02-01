@@ -1,0 +1,51 @@
+#include <iostream>
+#include <cmath>
+
+using namespace std;
+
+const int N = 3;
+
+void LU_decomposition(double A[N][N], double L[N][N], double U[N][N]) {
+    for (int i = 0; i < N; i++) {
+        for (int j = 0; j < N; j++) {
+            if (i <= j) {
+                U[i][j] = A[i][j];
+                for (int k = 0; k < i; k++) {
+                    U[i][j] -= L[i][k] * U[k][j];
+                }
+            } else {
+                L[i][j] = A[i][j];
+                for (int k = 0; k < j; k++) {
+                    L[i][j] -= L[i][k] * U[k][j];
+                }
+                L[i][j] /= U[j][j];
+            }
+        }
+    }
+}
+
+int main() {
+    double A[N][N] = {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};
+    double L[N][N] = {{0}};
+    double U[N][N] = {{0}};
+
+    LU_decomposition(A, L, U);
+
+    cout << "L: " << endl;
+    for (int i = 0; i < N; i++) {
+        for (int j = 0; j < N; j++) {
+            cout << L[i][j] << " ";
+        }
+        cout << endl;
+    }
+
+    cout << "U: " << endl;
+    for (int i = 0; i < N; i++) {
+        for (int j = 0; j < N; j++) {
+            cout << U[i][j] << " ";
+        }
+        cout << endl;
+    }
+
+    return 0;
+}

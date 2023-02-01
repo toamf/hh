@@ -1,0 +1,98 @@
+import java.sql.*;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+
+public class Main {
+    private Connection connection;
+    private JFrame frame;
+    private JTextField nameField, idField, costField;
+
+    public Main() {
+        // create a connection to the SQLite database
+        try {
+            connection = DriverManager.getConnection("jdbc:sqlite:serviceStations.db");
+            // create the service_stations table if it doesn't exist
+            connection.createStatement().execute("CREATE TABLE IF NOT EXISTS service_stations (name TEXT, id INTEGER, cost REAL)");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        // create a GUI for user input and output
+        frame = new JFrame("Service Station Management");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        // create a panel for the input fields
+        JPanel inputPanel = new JPanel();
+        inputPanel.setLayout(new GridLayout(3, 2));
+        inputPanel.add(new JLabel("Name:"));
+        nameField = new JTextField();
+        inputPanel.add(nameField);
+        inputPanel.add(new JLabel("ID:"));
+        idField = new JTextField();
+        inputPanel.add(idField);
+        inputPanel.add(new JLabel("Cost:"));
+        costField = new JTextField();
+        inputPanel.add(costField);
+        frame.add(inputPanel, BorderLayout.NORTH);
+
+        // create a panel for the buttons
+        JPanel buttonPanel = new JPanel();
+        JButton addButton = new JButton("Add Service Station");
+        addButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                // get the input from the user
+                String name = nameField.getText();
+                int id = Integer.parseInt(idField.getText());
+                double cost = Double.parseDouble(costField.getText());
+
+                // insert the new service station into the database
+                try {
+                    PreparedStatement statement = connection.prepareStatement("INSERT INTO service_stations (name, id, cost) VALUES (?, ?, ?)");
+                    statement.setString(1, name);
+                    statement.setInt(2, id);
+                    statement.setDouble(3, cost);
+                    statement.execute();
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
+
+                // clear the input fields
+                nameField.setText("");
+                idField.setText("");
+                costField.setText("");
+            }
+        });
+        buttonPanel.add(addButton);
+        JButton displayButton = new JButton("Display Service Stations");
+        displayButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                // query the database for all service stations
+                StringBuilder builder = new StringBuilder();
+                try {
+                    Statement statement = connection.createStatement();
+                    ResultSet result = statement.executeQuery("SELECT name, id, cost FROM service_stations ORDER BY name");
+                    while (result.next()) {
+                        builder.append("Name: " + result.getString("name") + ", ID: " + result.getInt("id") + ", Cost: " + result.getDouble("cost") + "\n");
+                    }
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
+
+                // display the service stations in a dialog box
+                JOptionPane.showMessageDialog(frame, builder.toString(), "Service Stations", JOptionPane.INFORMATION_MESSAGE);
+            }
+        });
+        buttonPanel.add(displayButton);
+        frame.add(buttonPanel, BorderLayout.SOUTH);
+
+        // show the GUI
+        frame.pack();
+        frame.setVisible(true);
+    }
+
+    public static void main(String[] args) {
+        new Main();
+    }
+}
+

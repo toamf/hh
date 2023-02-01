@@ -1,0 +1,290 @@
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Scanner;
+
+class Maintenance {
+    private final String stationName;
+    private final String stationAddress;
+    private final String vehicleName;
+    private final String repairType;
+    private final String dateReceived;
+    private final String dateIssued;
+    private final String repairResult;
+    private final String staffName;
+    private final double repairAmount;
+
+    public Maintenance(String stationName, String stationAddress, String vehicleName, String repairType, String dateReceived, String dateIssued, String repairResult, String staffName, double repairAmount) {
+        this.stationName = stationName;
+        this.stationAddress = stationAddress;
+        this.vehicleName = vehicleName;
+        this.repairType = repairType;
+        this.dateReceived = dateReceived;
+        this.dateIssued = dateIssued;
+        this.repairResult = repairResult;
+        this.staffName = staffName;
+        this.repairAmount = repairAmount;
+    }
+
+    public String getStationName() {
+        return stationName;
+    }
+
+    public String getStationAddress() {
+        return stationAddress;
+    }
+
+    public String getVehicleName() {
+        return vehicleName;
+    }
+
+    public String getRepairType() {
+        return repairType;
+    }
+
+    public String getDateReceived() {
+        return dateReceived;
+    }
+
+    public String getDateIssued() {
+        return dateIssued;
+    }
+
+    public String getRepairResult() {
+        return repairResult;
+    }
+
+    public String getStaffName() {
+        return staffName;
+    }
+
+    public double getRepairAmount() {
+        return repairAmount;
+    }
+}
+
+class ScheduledPreventiveInspectionPassenger extends Maintenance {
+    private final String inspectionType;
+    private final int year;
+    private final int mileage;
+    private final int period;
+
+    public ScheduledPreventiveInspectionPassenger(String stationName, String stationAddress, String vehicleName, String repairType, String dateReceived, String dateIssued, String repairResult, String staffName, double repairAmount, String inspectionType, int year, int mileage, int period) {
+        super(stationName, stationAddress, vehicleName, repairType, dateReceived, dateIssued, repairResult, staffName, repairAmount);
+        this.inspectionType = inspectionType;
+        this.year = year;
+        this.mileage = mileage;
+        this.period = period;
+    }
+
+    public String getInspectionType() {
+        return inspectionType;
+    }
+
+    public int getYear() {
+        return year;
+    }
+
+    public int getMileage() {
+        return mileage;
+    }
+
+    public int getPeriod() {
+        return period;
+    }
+}
+
+class Malfunctions extends Maintenance {
+    private final String malfunctionName;
+    private final String workPerformed;
+
+    public Malfunctions(String stationName, String stationAddress, String vehicleName, String repairType, String dateReceived, String dateIssued, String repairResult, String staffName, double repairAmount, String malfunctionName, String workPerformed) {
+        super(stationName, stationAddress, vehicleName, repairType, dateReceived, dateIssued, repairResult, staffName, repairAmount);
+        this.malfunctionName = malfunctionName;
+        this.workPerformed = workPerformed;
+    }
+
+    public String getMalfunctionName() {
+        return malfunctionName;
+    }
+
+    public String getWorkPerformed() {
+        return workPerformed;
+    }
+}
+
+class ScheduledPreventiveInspectionFreight extends Maintenance {
+    private final String inspectionType;
+    private final int year;
+    private final int mileage;
+    private final int period;
+    private final int engineCapacity;
+
+    public ScheduledPreventiveInspectionFreight(String stationName, String stationAddress, String vehicleName, String repairType, String dateReceived, String dateIssued, String repairResult, String staffName, double repairAmount, String inspectionType, int year, int mileage, int period, int engineCapacity) {
+        super(stationName, stationAddress, vehicleName, repairType, dateReceived, dateIssued, repairResult, staffName, repairAmount);
+        this.inspectionType = inspectionType;
+        this.year = year;
+        this.mileage = mileage;
+        this.period = period;
+        this.engineCapacity = engineCapacity;
+    }
+
+    public String getInspectionType() {
+        return inspectionType;
+    }
+
+    public int getYear() {
+        return year;
+    }
+
+    public int getMileage() {
+        return mileage;
+    }
+
+    public int getPeriod() {
+        return period;
+    }
+
+    public int getEngineCapacity() {
+        return engineCapacity;
+    }
+}
+
+public class Main {
+    private static final ArrayList<Maintenance> repairs = new ArrayList<>();
+    private static final Scanner scanner = new Scanner(System.in);
+
+    public static void main(String[] args) {
+        int option = -1;
+        while (option != 0) {
+            System.out.println("1. Добавить ремонт");
+            System.out.println("2. Сортировать по типу ремонта");
+            System.out.println("3. Сортировать по объему ремонта");
+            System.out.println("4. Печать");
+            System.out.println("0. Выход");
+            option = scanner.nextInt();
+            switch (option) {
+                case 1 -> addRepair();
+                case 2 -> sortByTypeOfRepair();
+                case 3 -> sortByAmountOfRepair();
+                case 4 -> printRepairs();
+                case 0 -> System.out.println("Выход...");
+                default -> System.out.println("Недопустимый вариант. Пожалуйста, попробуйте снова.");
+            }
+        }
+    }
+
+    private static void addRepair() {
+        scanner.nextLine();
+        System.out.print("Введите название станции: ");
+        String stationName = scanner.nextLine();
+        System.out.print("Введите адрес станции: ");
+        String stationAddress = scanner.nextLine();
+        System.out.print("Введите название транспортного средства: ");
+        String vehicleName = scanner.nextLine();
+        System.out.print("Введите тип ремонта: ");
+        String repairType = scanner.nextLine();
+        System.out.print("Введите дату получения (mm/dd/yyyy): ");
+        String dateReceived = scanner.nextLine();
+        System.out.print("Введите дату выпуска (mm/dd/yyyy): ");
+        String dateIssued = scanner.nextLine();
+        System.out.print("Введите результат ремонта: ");
+        String repairResult = scanner.nextLine();
+        System.out.print("Введите имя сотрудника: ");
+        String staffName = scanner.nextLine();
+        System.out.print("Введите сумму ремонта: ");
+        double repairAmount = scanner.nextDouble();
+        System.out.println("Поддержка/Легковые/Неисправности/Грузовые");
+        System.out.print("Войдите в класс ремонта: ");
+        String repairClass = scanner.next();
+        switch (repairClass) {
+            case "Поддержка" -> {
+                Maintenance repair = new Maintenance(stationName, stationAddress, vehicleName, repairType, dateReceived, dateIssued, repairResult, staffName, repairAmount);
+                repairs.add(repair);
+            }
+            case "Легковые" -> {
+                scanner.nextLine();
+                System.out.print("Введите тип проверки: ");
+                String inspectionType = scanner.nextLine();
+                System.out.print("Введите год: ");
+                int year = scanner.nextInt();
+                System.out.print("Введите пробег: ");
+                int mileage = scanner.nextInt();
+                System.out.print("Введите период: ");
+                int period = scanner.nextInt();
+                ScheduledPreventiveInspectionPassenger spi = new ScheduledPreventiveInspectionPassenger(stationName, stationAddress, vehicleName, repairType, dateReceived, dateIssued, repairResult, staffName, repairAmount, inspectionType, year, mileage, period);
+                repairs.add(spi);
+            }
+            case "Неисправности" -> {
+                scanner.nextLine();
+                System.out.print("Введите название неисправности: ");
+                String malfunctionName = scanner.nextLine();
+                System.out.print("Введите выполненную работу: ");
+                String workPerformed = scanner.nextLine();
+                Malfunctions malfunctions = new Malfunctions(stationName, stationAddress, vehicleName, repairType, dateReceived, dateIssued, repairResult, staffName, repairAmount, malfunctionName, workPerformed);
+                repairs.add(malfunctions);
+            }
+            case "Грузовые" -> {
+                scanner.nextLine();
+                System.out.print("Введите тип проверки: ");
+                String inspectionType1 = scanner.nextLine();
+                System.out.print("Введите год: ");
+                int year1 = scanner.nextInt();
+                System.out.print("Введите пробег: ");
+                int mileage1 = scanner.nextInt();
+                System.out.print("Введите период: ");
+                int period1 = scanner.nextInt();
+                System.out.print("Введите мощность двигателя: ");
+                int engineCapacity = scanner.nextInt();
+                ScheduledPreventiveInspectionFreight spi1 = new ScheduledPreventiveInspectionFreight(stationName, stationAddress, vehicleName, repairType, dateReceived, dateIssued, repairResult, staffName, repairAmount, inspectionType1, year1, mileage1, period1, engineCapacity);
+                repairs.add(spi1);
+            }
+            default -> System.out.println("Недопустимый класс. Пожалуйста, попробуйте снова.");
+        }
+        System.out.println("Ремонт добавлен успешно!");
+    }
+
+    private static void sortByTypeOfRepair() {
+        Collections.sort(repairs, (repair1, repair2) -> repair1.getRepairType().compareTo(repair2.getRepairType()));
+        System.out.println("Ремонты, отсортированы по типу ремонта!");
+    }
+
+    private static void sortByAmountOfRepair() {
+        Collections.sort(repairs, (repair1, repair2) -> Double.compare(repair1.getRepairAmount(), repair2.getRepairAmount()));
+        System.out.println("Ремонты отсортированы по объему ремонта!");
+    }
+
+    private static void printRepairs() {
+        for (Maintenance repair : repairs) {
+            System.out.println("Название станции: " + repair.getStationName());
+            System.out.println("Адрес станции: " + repair.getStationAddress());
+            System.out.println("Название транспортного средства: " + repair.getVehicleName());
+            System.out.println("Тип ремонта: " + repair.getRepairType());
+            System.out.println("Дата получения: " + repair.getDateReceived());
+            System.out.println("Дата выпуска: " + repair.getDateIssued());
+            System.out.println("Результат ремонта: " + repair.getRepairResult());
+            System.out.println("Название персонала: " + repair.getStaffName());
+            System.out.println("Сумма ремонта: " + repair.getRepairAmount());
+            if (repair instanceof ScheduledPreventiveInspectionPassenger) {
+                ScheduledPreventiveInspectionPassenger spi = (ScheduledPreventiveInspectionPassenger) repair;
+                System.out.println("Тип проверки: " + spi.getInspectionType());
+                System.out.println("Год: " + spi.getYear());
+                System.out.println("Пробег: " + spi.getMileage());
+                System.out.println("Период: " + spi.getPeriod());
+            } else if (repair instanceof Malfunctions) {
+                Malfunctions malfunctions = (Malfunctions) repair;
+                System.out.println("Период: " + malfunctions.getMalfunctionName());
+                System.out.println("Выполненная работа: " + malfunctions.getWorkPerformed());
+            } else if (repair instanceof ScheduledPreventiveInspectionFreight) {
+                ScheduledPreventiveInspectionFreight spi1 = (ScheduledPreventiveInspectionFreight) repair;
+                System.out.println("Тип проверки: " + spi1.getInspectionType());
+                System.out.println("Год: " + spi1.getYear());
+                System.out.println("Пробег: " + spi1.getMileage());
+                System.out.println("Период: " + spi1.getPeriod());
+                System.out.println("Мощность двигателя: " + spi1.getEngineCapacity());
+            }
+            System.out.println("-----------------------------");
+        }
+    }
+}
+
+

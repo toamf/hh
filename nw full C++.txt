@@ -1,0 +1,170 @@
+#include <string>
+#include <fstream>
+#include <cstring>
+
+class Picture_Surname {
+public:
+    Picture_Surname();
+    ~Picture_Surname();
+    Picture_Surname(const std::string &fileName);
+    Picture_Surname(const Picture_Surname &other);
+    void readFromFile(const std::string &fileName);
+    void writeToFile(const std::string &fileName);
+    void changeRed(double multiplier);
+    void changeGreen(double multiplier);
+    void changeBlue(double multiplier);
+    void convertToBlackAndWhite();
+    void flipVertical();
+    void flipHorizontal();
+    void rotateCounterClockwise();
+
+private:
+    unsigned char *pixels;
+};
+
+Picture_Surname::Picture_Surname() {
+    pixels = new unsigned char[256 * 256 * 3];
+}
+
+Picture_Surname::~Picture_Surname() {
+    delete[] pixels;
+}
+
+Picture_Surname::Picture_Surname(const std::string &fileName) {
+    pixels = new unsigned char[256 * 256 * 3];
+    readFromFile(fileName);
+}
+
+Picture_Surname::Picture_Surname(const Picture_Surname &other) {
+    pixels = new unsigned char[256 * 256 * 3];
+    memcpy(pixels, other.pixels, 256 * 256 * 3);
+}
+
+void Picture_Surname::readFromFile(const std::string &fileName) {
+    std::ifstream file(fileName, std::ios::binary);
+    char header[54];
+    file.read(header, 54);
+    file.read((char*)pixels, 256 * 256 * 3);
+    file.close();
+}
+
+void Picture_Surname::writeToFile(const std::string &fileName) {
+    std::ofstream file(fileName, std::ios::binary);
+    char header[54] = {
+        'B', 'M', // magic number
+        0, 0, 0, 0, // size in bytes
+        0, 0, // app data
+        0, 0, // app data
+        54, 0, 0, 0, // offset to pixel data
+        40, 0, 0, 0, // size of info header
+        0, 0, 0, 0, // width of image
+        0, 0, 0, 0, // height of image
+        1, 0, // number of color planes
+        24, 0, // bits per pixel
+        0, 0, 0, 0, // compression type
+        0, 0, 0, 0, // image size
+        0, 0, 0, 0, // horizontal resolution
+        0, 0, 0, 0, // vertical resolution
+        0, 0, 0, 0, // number of colors
+        0, 0, 0, 0, // important colors
+    };
+    file.write(header, 54);
+    file.write((char*)pixels, 256 * 256 * 3);
+    file.close();
+}
+
+void Picture_Surname::changeRed(double multiplier) {
+    for (int i = 0; i < 256 * 256; i++) {
+        int newValue = pixels[i * 3] * multiplier;
+        if (newValue > 255) {
+            newValue = 255;
+        } else if (newValue < 0) {
+            newValue = 0;
+        }
+        pixels[i * 3] = (unsigned char)newValue;
+    }
+}
+
+void Picture_Surname::changeGreen(double multiplier) {
+    for (int i = 0; i < 256 * 256; i++) {
+        int newValue = pixels[i * 3 + 1] * multiplier;
+        if (newValue > 255) {
+            newValue = 255;
+        } else if (newValue < 0) {
+            newValue = 0;
+        }
+        pixels[i * 3 + 1] = (unsigned char)newValue;
+    }
+}
+
+void Picture_Surname::changeBlue(double multiplier) {
+    for (int i = 0; i < 256 * 256; i++) {
+        int newValue = pixels[i * 3 + 2] * multiplier;
+        if (newValue > 255) {
+            newValue = 255;
+        } else if (newValue < 0) {
+            newValue = 0;
+        }
+        pixels[i * 3 + 2] = (unsigned char)newValue;
+    }
+}
+
+void Picture_Surname::convertToBlackAndWhite() {
+    for (int i = 0; i < 256 * 256; i++) {
+        int grayValue = (pixels[i * 3] + pixels[i * 3 + 1] + pixels[i * 3 + 2]) / 3;
+        pixels[i * 3] = pixels[i * 3 + 1] = pixels[i * 3 + 2] = (unsigned char)grayValue;
+    }
+}
+
+void Picture_Surname::flipVertical() {
+    for (int i = 0; i < 256; i++) {
+        for (int j = 0; j < 128; j++) {
+            int topIndex = (i * 256 + j) * 3;
+            int bottomIndex = (i * 256 + 255 - j) * 3;
+            unsigned char tempR = pixels[topIndex];
+            unsigned char tempG = pixels[topIndex + 1];
+            unsigned char tempB = pixels[topIndex + 2];
+            pixels[topIndex] = pixels[bottomIndex];
+            pixels[topIndex + 1] = pixels[bottomIndex + 1];
+            pixels[topIndex + 2] = pixels[bottomIndex + 2];
+            pixels[bottomIndex] = tempR;
+            pixels[bottomIndex + 1] = tempG;
+            pixels[bottomIndex + 2] = tempB;
+        }
+    }
+}
+
+void Picture_Surname::flipHorizontal() {
+    for (int i = 0; i < 128; i++) {
+        for (int j = 0; j < 256; j++) {
+            int leftIndex = (i * 256 + j) * 3;
+            int rightIndex = ((255 - i) * 256 + j) * 3;
+            unsigned char tempR = pixels[leftIndex];
+            unsigned char tempG = pixels[leftIndex + 1];
+            unsigned char tempB = pixels[leftIndex + 2];
+            pixels[leftIndex] = pixels[rightIndex];
+            pixels[leftIndex + 1] = pixels[rightIndex + 1];
+            pixels[leftIndex + 2] = pixels[rightIndex + 2];
+            pixels[rightIndex] = tempR;
+            pixels[rightIndex + 1] = tempG;
+            pixels[rightIndex + 2] = tempB;
+        }
+    }
+}
+
+void Picture_Surname::rotateCounterClockwise() {
+    unsigned char* newPixels = new unsigned char[256 * 256 * 3];
+    for (int i = 0; i < 256; i++) {
+        for (int j = 0; j < 256; j++) {
+            int oldIndex = (i * 256 + j) * 3;
+            int newIndex = (j * 256 + (255 - i)) * 3;
+            newPixels[newIndex] = pixels[oldIndex];
+            newPixels[newIndex + 1] = pixels[oldIndex + 1];
+            newPixels[newIndex + 2] = pixels[oldIndex + 2];
+        }
+    }
+    delete[] pixels;
+    pixels = newPixels;
+}
+
+
