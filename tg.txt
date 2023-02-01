@@ -1,0 +1,71 @@
+import aiohttp
+import asyncio
+
+TOKEN = ''
+
+
+class EchoBot:
+    def __init__(self):
+        self.state = 'waiting_for_message'
+        self.last_update = 0
+        self.chat_ids = set()  # Set to store chat IDs of all users who are connected to the bot
+
+    async def get_updates(self, offset):
+        url = f'https://api.telegram.org/bot{TOKEN}/getUpdates?offset={offset}'
+        async with aiohttp.ClientSession() as session:
+            async with session.get(url) as response:
+                data = await response.json()
+                return data
+
+    async def send_message(self, chat_id, text):
+        url = f'https://api.telegram.org/bot{TOKEN}/sendMessage?chat_id={chat_id}&text={text}'
+        async with aiohttp.ClientSession() as session:
+            async with session.get(url) as response:
+                data = await response.json()
+                return data
+
+    async def broadcast_message(self, text):
+        """Send a message to all users who are connected to the bot."""
+        tasks = []
+        for chat_id in self.chat_ids:
+            task = asyncio.create_task(self.send_message(chat_id, text))
+            tasks.append(task)
+        await asyncio.gather(*tasks)
+
+    async def run(self):
+        while True:
+            if self.state == 'waiting_for_message':
+                updates = await self.get_updates(self.last_update + 1)
+                if updates['result']:
+                    self.last_update = updates['result'][-1]['update_id']
+                    self.state = 'processing_message'
+            elif self.state == 'processing_message':
+                for update in updates['result']:
+                    message = update['message']
+                    chat_id = message['chat']['id']
+                    self.chat_ids.add(chat_id)  # Add chat ID to set
+                    if 'text' in message:
+                        text = message['text']
+                        if text == '/broadcast':  # Check if the message is a command to broadcast
+                            text = 'Enter the message to broadcast:'
+                            await self.send_message(chat_id, text)
+                            self.state = 'waiting_for_broadcast_message'
+                        else:
+                            # await self.send_message(chat_id, text)
+                            self.state = 'waiting_for_message'
+                    else:
+                        text = "Sorry, I don't understand this type of message"
+                        await self.send_message(chat_id, text)
+                        self.state = 'waiting_for_message'
+            elif self.state == 'waiting_for_broadcast_message':
+                updates = await self.get_updates(self.last_update + 1)
+                if updates['result']:
+                    self.last_update = updates['result'][-1]['update_id']
+                    broadcast_message = updates['result'][-1]['message']['text']
+                    await self.broadcast_message(broadcast_message)
+                    self.state = 'waiting_for_message'
+
+
+bot = EchoBot()
+loop = asyncio.get_event_loop()
+loop.run_until_complete(bot.run())
