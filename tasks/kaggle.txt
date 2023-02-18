@@ -1,0 +1,134 @@
+import numpy as np
+
+# Define the number of states and episodes
+num_states = 19
+num_episodes = 10
+num_runs = 10
+
+# Define the lambdas and alphas
+lambdas = [0.0, 0.4, 0.8, 0.9, 0.95, 0.975, 0.99, 1]
+alphas = [np.arange(0, 1.1, 0.1),
+          np.arange(0, 1.1, 0.1),
+          np.arange(0, 1.1, 0.1),
+          np.arange(0, 1.1, 0.1),
+          np.arange(0, 1.1, 0.1),
+          np.arange(0, 0.55, 0.05),
+          np.arange(0, 0.22, 0.02),
+          np.arange(0, 0.11, 0.01)]
+
+# Define the true values using the Bellman equation
+true_values = np.zeros(num_states)
+for s in range(1, num_states-1):
+    true_values[s] = 0.5 * (true_values[s-1] + true_values[s+1])
+
+# Define the transition probabilities
+P = np.zeros((num_states, num_states))
+for s in range(1, num_states-1):
+    P[s, s-1] = 0.5
+    P[s, s+1] = 0.5
+P[0, 0] = 1
+P[num_states-1, num_states-1] = 1
+
+# Define the rewards
+R = np.zeros(num_states)
+R[num_states-1] = -1
+
+# Define the TD(𝜆) algorithm
+def TD_lambda(alpha, lambda_value):
+    # Initialize the value function and eligibility traces
+    V = np.zeros(num_states)
+    E = np.zeros(num_states)
+
+    # Loop over the episodes
+    for episode in range(num_episodes):
+        # Sample a starting state
+        s = num_states // 2
+
+        # Loop until the terminal state is reached
+        while s != num_states-1:
+            # Choose an action (left or right) randomly
+            if np.random.rand() < 0.5:
+                s_next = s - 1
+            else:
+                s_next = s + 1
+
+            # Calculate the TD error
+            delta = R[s_next] + np.dot(P[s_next], V) - V[s]
+
+            # Update the eligibility traces
+            E = lambda_value * E
+            E[s] += 1
+
+            # Update the value function
+            V += alpha * delta * E
+
+            # Update the current state
+            s = s_next
+
+    # Return the learned value function
+    return V
+
+# Loop over the lambdas and alphas
+RMS_errors = np.zeros((len(lambdas), len(alphas[0])))
+for i, lambda_value in enumerate(lambdas):
+    for j, alpha_value in enumerate(alphas[i]):
+        run_errors = []
+        for k in range(10): # 10 different sequences of walks
+            # Initialize the state-value function and eligibility traces
+            state_values = np.zeros(19)
+            eligibility_traces = np.zeros(19)
+            for episode in range(10): # 10 episodes per sequence
+                # Initialize the starting state
+                current_state = 9
+
+                # Initialize the list to store the visited states
+                visited_states = []
+
+                # Loop until the terminal state is reached
+                while current_state not in [0, 18]:
+                    # Take a step
+                    next_state = np.random.choice([current_state - 1, current_state + 1])
+
+                    # Store the visited state
+                    visited_states.append(current_state)
+
+                    # Update the state-value function
+                    delta = -1 + state_values[next_state] - state_values[current_state]
+                    state_values[current_state] += alpha_value * delta
+                    eligibility_traces[current_state] = 1
+
+                    # Update the eligibility traces
+                    eligibility_traces *= lambda_value
+
+                    # Update the current state
+                    current_state = next_state
+
+                # Update the terminal state
+                if current_state == 0:
+                    delta = -1 - state_values[0]
+                else:
+                    delta = -1 + state_values[18] - state_values[-1]
+                state_values[current_state] += alpha_value * delta
+                eligibility_traces[current_state] = 1
+
+                # Update the eligibility traces for the visited states
+                for visited_state in visited_states:
+                    state_values[visited_state] += alpha_value * delta * eligibility_traces[visited_state]
+                    eligibility_traces[visited_state] *= lambda_value
+
+            # Calculate the RMS error for the current run
+            true_values = np.array([-1 if i in [0, 18] else 0 for i in range(19)])
+            run_errors.append(np.sqrt(np.mean((true_values - state_values)**2)))
+
+        # Average the RMS errors over the 10 runs
+        RMS_errors[i, j] = np.mean(run_errors)
+
+import matplotlib.pyplot as plt
+
+plt.figure(figsize=(10, 6))
+for i in range(len(lambdas)):
+    plt.plot(alphas[i], RMS_errors[i], label=f'lambda = {lambdas[i]}')
+plt.xlabel('alpha')
+plt.ylabel('RMS error')
+plt.legend()
+plt.show()

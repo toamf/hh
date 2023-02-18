@@ -1,0 +1,59 @@
+Философия паролей
+
+
+Код - создаете password.txt и в него добавляете input из задания. ОТВЕТ: 416
+
+import java.io.File
+
+fun main() {
+    val input = File("passwords.txt").readLines()
+    var validCount = 0
+    for (line in input) {
+        val (range, charWithColon, password) = line.split(" ")
+        val char = charWithColon[0]
+        val (min, max) = range.split("-").map { it.toInt() }
+        val count = password.count { it == char }
+        if (count in min..max) {
+            validCount++
+        }
+    }
+    println("Number of valid passwords: $validCount")
+}
+
+Тест
+
+import org.junit.Assert.assertEquals
+import org.junit.Test
+import java.io.File
+
+class PasswordCheckerTest {
+    @Test
+    fun testValidPasswords() {
+        val input = listOf(
+            "1-3 a: abcde",
+            "2-9 c: ccccccccc",
+            "4-6 d: dddddd",
+            "2-4 p: ppppp"
+        )
+        val expectedCount = 3
+        val tempFile = createTempFile()
+        tempFile.writeText(input.joinToString("\n"))
+        val result = countValidPasswords(tempFile.path)
+        assertEquals(expectedCount, result)
+    }
+
+    @Test
+    fun testNoValidPasswords() {
+        val input = listOf(
+            "1-3 a: aaaaaaa",
+            "2-9 c: bbbcccbbbc",
+            "4-6 d: ddddd",
+            "2-4 p: qqqq"
+        )
+        val expectedCount = 0
+        val tempFile = createTempFile()
+        tempFile.writeText(input.joinToString("\n"))
+        val result = countValidPasswords(tempFile.path)
+        assertEquals(expectedCount, result)
+    }
+}
