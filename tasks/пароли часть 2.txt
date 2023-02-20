@@ -1,0 +1,59 @@
+import java.io.File
+
+fun countValidPasswords(inputFile: String): Int {
+    val input = File(inputFile).readLines()
+    var validCount = 0
+    for (line in input) {
+        val (positions, charWithColon, password) = line.split(" ")
+        val char = charWithColon[0]
+        val (pos1, pos2) = positions.split("-").map { it.toInt() }
+        val match1 = password[pos1 - 1] == char
+        val match2 = password[pos2 - 1] == char
+        if (match1 xor match2) {
+            validCount++
+        }
+    }
+    return validCount
+}
+
+fun main() {
+    val inputFile = "input.txt"
+    val validCount = countValidPasswords(inputFile)
+    println("Number of valid passwords: $validCount")
+}
+
+
+import org.junit.Test
+import java.io.File
+import kotlin.test.assertEquals
+
+class PasswordPhilosophyTest {
+
+    @Test
+    fun testCountValidPasswords() {
+        val inputFile = "src/test/resources/testInput.txt"
+        val expectedValidCount = 9
+        val actualValidCount = countValidPasswords(inputFile)
+        assertEquals(expectedValidCount, actualValidCount)
+    }
+
+}
+
+
+Для теста testInput.txt
+
+8-11 l: qllllqllklhlvtl
+1-3 m: wmmmmmttm
+2-4 p: pgppp
+11-12 n: nnndnnnnnnnn
+17-19 q: qprqdcgrqrqmmhtqqvr
+16-17 k: nphkpzqswcltkkbkk
+6-9 c: rvcvlcjcbhxs
+18-20 v: hbjhmrtwzfqfvhzjjvcv
+5-9 z: jzzhzttttnz
+3-5 g: jtgpbbs
+1-3 k: lkbxk
+2-3 p: fpgj
+8-10 q: qqqqqqqqqqq
+10-11 f: ffffqfffhflfffffff
+
