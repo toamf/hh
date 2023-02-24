@@ -1,0 +1,105 @@
+# Load the data
+df <- read.csv("/kaggle/input/2d23d3/boston.csv")
+
+# Subset the data by treatment group
+treat <- subset(df, treatment == 1)
+
+# Subset the data by control group
+ctrl <- subset(df, treatment == 0)
+
+# Calculate the proportions of white respondents in the treatment and control groups
+prop_white_treat <- sum(treat$white == 1) / nrow(treat)
+prop_white_ctrl <- sum(ctrl$white == 1) / nrow(ctrl)
+
+# Calculate the proportions of respondents that went to college in the treatment and control groups
+prop_college_treat <- sum(treat$college == 1) / nrow(treat)
+prop_college_ctrl <- sum(ctrl$college == 1) / nrow(ctrl)
+
+# Print the results
+cat("Proportion of white respondents in treatment group:", prop_white_treat, "\n")
+cat("Proportion of white respondents in control group:", prop_white_ctrl, "\n")
+cat("Proportion of respondents that went to college in treatment group:", prop_college_treat, "\n")
+cat("Proportion of respondents that went to college in control group:", prop_college_ctrl, "\n")
+
+
+# create variable for difference in attitudes
+df$diff_attitudes <- df$numberim.post - df$numberim.pre
+
+# calculate mean change in attitudes for treatment group
+treatment_mean <- mean(df$diff_attitudes[df$treatment == 1], na.rm = TRUE)
+
+# calculate mean change in attitudes for control group
+control_mean <- mean(df$diff_attitudes[df$treatment == 0], na.rm = TRUE)
+
+# calculate difference-in-differences
+did <- treatment_mean - control_mean
+
+# calculate percent effect
+percent_effect <- (did / control_mean) * 100
+
+# output results
+cat("Absolute effect:", abs(did), "\n")
+cat("Percent effect:", percent_effect, "%\n")
+
+
+
+# Create density histograms of income for treatment and control groups
+library(ggplot2)
+ggplot(df, aes(x = income, fill = treatment)) +
+  geom_density(alpha = 0.5) +
+  facet_wrap(~ treatment, ncol = 2, scales = "free") +
+  labs(title = "Density Histograms of Income by Treatment Group") +
+  xlab("Income") +
+  ylab("Density") +
+  # Add mean lines to each plot
+  stat_function(fun = dnorm, args = list(mean = mean(df$income[df$treatment == 0]), sd = sd(df$income[df$treatment == 0])), aes(color = "Control Mean")) +
+  stat_function(fun = dnorm, args = list(mean = mean(df$income[df$treatment == 1]), sd = sd(df$income[df$treatment == 1])), aes(color = "Treatment Mean")) +
+  scale_color_manual(name = "Mean", values = c("red", "blue"))
+
+
+
+
+
+
+
+# Load the dhs_ipv.csv data set
+dhs_ipv <- read.csv("/kaggle/input/f43f34/dhs_ipv.csv")
+
+# Frequency table for the year variable
+table(dhs_ipv$year)
+
+# Table of proportions for the region variable
+prop.table(table(dhs_ipv$region == "Asia")) * 100
+
+
+library(ggplot2)
+
+# Scatterplot between beat_goesout and no_media
+ggplot(dhs_ipv, aes(x = no_media, y = beat_goesout)) + 
+  geom_point() +
+  ggtitle("Attitudes towards IPV and Exposure to Information") +
+  xlab("No Access to Media") +
+  ylab("Attitudes towards IPV")
+
+# Scatterplot between beat_goesout and sec_school
+ggplot(dhs_ipv, aes(x = sec_school, y = beat_goesout)) + 
+  geom_point() +
+  ggtitle("Attitudes towards IPV and Education Level") +
+  xlab("Secondary School Education") +
+  ylab("Attitudes towards IPV")
+
+
+
+# Scatterplot of beat_burnfood and no_media
+ggplot(data = dhs_ipv, aes(x = no_media, y = beat_burnfood)) + 
+  geom_point(alpha = 0.5) +
+  labs(title = "Association between Beat Burning Wife and No Media Exposure",
+       x = "No Media Exposure", 
+       y = "Beat Burning Wife")
+
+# Scatterplot of beat_burnfood and sec_school
+ggplot(data = dhs_ipv, aes(x = sec_school, y = beat_burnfood)) + 
+  geom_point(alpha = 0.5) +
+  labs(title = "Association between Beat Burning Wife and Secondary Education",
+       x = "Secondary Education", 
+       y = "Beat Burning Wife")
