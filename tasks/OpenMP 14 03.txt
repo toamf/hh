@@ -1,0 +1,70 @@
+1. 
+
+#include <iostream>
+#include <omp.h>
+
+int main() {
+    #ifdef _OPENMP
+        int num_threads = omp_get_max_threads(); // максимальное число потоков
+        omp_set_num_threads(num_threads); // установка числа потоков
+        omp_sched_t schedule_type = omp_sched_static; // тип расписания
+        int chunk_size = 10; // размер блока
+        omp_set_schedule(schedule_type, chunk_size); // установка расписания
+        #pragma omp parallel
+        {
+            int thread_id = omp_get_thread_num(); // локальная переменная для номера потока
+            std::cout << "Thread " << thread_id << " of " << num_threads << " threads." << std::endl;
+        }
+    #else
+        std::cout << "OpenMP is not supported." << std::endl;
+    #endif
+    return 0;
+}
+
+2. 
+
+#include <iostream>
+#include <cstdlib>
+#include <omp.h>
+
+int main()
+{
+    const int N = 12; // число элементов в массиве
+    const int num_threads = 4; // число потоков
+
+    // инициализируем массив A произвольными числами
+    int A[N];
+    for (int i = 0; i < N; ++i)
+        A[i] = rand() % 100;
+
+    // создаем дополнительный массив B
+    int B[num_threads];
+
+    // начало параллельного региона
+    #pragma omp parallel num_threads(num_threads)
+    {
+        int thread_num = omp_get_thread_num();
+        int thread_sum = 0;
+        int chunk_size = N / num_threads; // размер блока чисел для каждого потока
+
+        // вычисляем частичную сумму элементов массива A
+        for (int i = thread_num * chunk_size; i < (thread_num + 1) * chunk_size; ++i)
+            thread_sum += A[i];
+
+        // сохраняем результат в массив B
+        B[thread_num] = thread_sum;
+
+        // выводим номер потока и значение его частичной суммы
+        std::cout << "Thread " << thread_num << ": sum = " << thread_sum << std::endl;
+    } // конец параллельного региона
+
+    // суммируем элементы массива B
+    int total_sum = 0;
+    for (int i = 0; i < num_threads; ++i)
+        total_sum += B[i];
+
+    // выводим общую сумму
+    std::cout << "Total sum = " << total_sum << std::endl;
+
+    return 0;
+}

@@ -1,0 +1,84 @@
+#include <iostream>
+#include <vector>
+#include <unordered_set>
+#include <algorithm>
+
+using namespace std;
+
+class WordGame {
+public:
+    WordGame() {}
+    ~WordGame() {}
+
+    void start_game(string word, int num_players) {
+        this->word = word;
+        this->num_players = num_players;
+        scores.resize(num_players, 0);
+        used_words.clear();
+    }
+
+    bool make_move(string word) {
+        if (!can_form_word(word) || is_used(word)) {
+            return false;
+        }
+        scores[current_player] += 1;
+        used_words.insert(word);
+        current_player = (current_player + 1) % num_players;
+        return true;
+    }
+
+    void play() {
+        current_player = 0;
+        string word;
+        while (true) {
+            cout << "Игрок " << current_player + 1 << ", введите слово: ";
+            cin >> word;
+            if (!make_move(word)) {
+                cout << "Недопустимый ход. Игрок " << current_player + 1 << " проиграл." << endl;
+                return;
+            }
+        }
+    }
+
+private:
+    string word;
+    int num_players;
+    vector<int> scores;
+    unordered_set<string> used_words;
+    int current_player;
+
+    bool can_form_word(string word) {
+        string copy_word = this->word;
+        for (char c : word) {
+            auto it = find(copy_word.begin(), copy_word.end(), c);
+            if (it == copy_word.end()) {
+                return false;
+            }
+            copy_word.erase(it);
+        }
+        return true;
+    }
+
+    bool is_used(string word) {
+        return used_words.count(word) > 0;
+    }
+};
+
+int main() {
+    string word;
+    int num_players;
+
+    cout << "Введите слово: ";
+    cin >> word;
+
+    cout << "Введите количество игроков: ";
+    cin >> num_players;
+
+    WordGame game;
+    game.start_game(word, num_players);
+    game.play();
+
+    return 0;
+}
+
+tg toamf
