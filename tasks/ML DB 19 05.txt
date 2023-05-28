@@ -1,0 +1,81 @@
+import mysql.connector
+import tensorflow as tf
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import LabelEncoder
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Dense, Embedding, LSTM
+from tensorflow.keras.preprocessing.text import Tokenizer
+from tensorflow.keras.preprocessing.sequence import pad_sequences
+
+# Установка соединения с базой данных
+connection = mysql.connector.connect(
+    host="localhost",
+    user="",
+    password="",
+    database="gctestings"
+)
+
+# Запрос для получения данных из таблицы test_case и defect
+query = "SELECT t.id, t.expected_result, t.actual_result, t.test_result, d.typedef_id FROM test_case t JOIN defect d ON t.id = d.test_case_id"
+
+# Загрузка данных в DataFrame
+df = pd.read_sql(query, connection)
+
+# Закрытие соединения с базой данных
+connection.close()
+
+# Подготовка данных
+# Разделение данных на обучающий и тестовый наборы
+X = df[['expected_result', 'actual_result', 'test_result']]
+y = df['typedef_id']
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Преобразование текстовых данных в числовые последовательности
+tokenizer = Tokenizer()
+tokenizer.fit_on_texts(X_train['expected_result'] + ' ' + X_train['actual_result'] + ' ' + X_train['test_result'])
+
+X_train_seq = tokenizer.texts_to_sequences(X_train['expected_result'] + ' ' + X_train['actual_result'] + ' ' + X_train['test_result'])
+X_test_seq = tokenizer.texts_to_sequences(X_test['expected_result'] + ' ' + X_test['actual_result'] + ' ' + X_test['test_result'])
+
+# Приведение последовательностей к одной длине
+max_sequence_length = max(len(seq) for seq in X_train_seq)
+X_train_padded = pad_sequences(X_train_seq, maxlen=max_sequence_length)
+X_test_padded = pad_sequences(X_test_seq, maxlen=max_sequence_length)
+
+# Преобразование меток классов в числовые значения
+label_encoder = LabelEncoder()
+y_train_encoded = label_encoder.fit_transform(y_train)
+y_test_encoded = label_encoder.transform(y_test)
+
+# Создание модели
+model = Sequential()
+model.add(Embedding(len(tokenizer.word_index) + 1, 128, input_length=max_sequence_length))
+model.add(LSTM(128))
+model.add(Dense(128, activation='relu'))
+model.add(Dense(len(label_encoder.classes_), activation='softmax'))
+
+# Компиляция модели
+model.compile(loss='sparse_categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
+
+# Обучение модели
+model.fit(X_train_padded, y_train_encoded, validation_data=(X_test_padded, y_test_encoded), epochs=10, batch_size=32)
+
+# Оценка модели на тестовом наборе данных
+loss, accuracy = model.evaluate(X_test_padded, y_test_encoded)
+print(f'Test Loss: {loss:.4f}')
+print(f'Test Accuracy: {accuracy:.4f}')
+
+# Сохранение модели
+model.save('console_defect_model.h5')
+
+
+
+
+
+
+
+
+
+

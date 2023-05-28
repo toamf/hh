@@ -1,0 +1,98 @@
+program CheckThreeConnected;
+
+type
+  NodePtr = ^Node;
+  Node = record
+    City: Char;
+    Next: NodePtr;
+  end;
+
+function IsThreeConnected(roads: NodePtr): Boolean;
+var
+  A, B, C, D: NodePtr;
+begin
+  A := roads;
+  
+  while A <> nil do
+  begin
+    B := A^.Next;
+    
+    while B <> nil do
+    begin
+      C := B^.Next;
+      
+      while C <> nil do
+      begin
+        D := C^.Next;
+        
+        while D <> nil do
+        begin
+          if (A^.City <> B^.City) and (A^.City <> C^.City) and (A^.City <> D^.City) and
+             (B^.City <> C^.City) and (B^.City <> D^.City) and (C^.City <> D^.City) then
+          begin
+            if ((A^.City = D^.City) and (B^.City <> C^.City)) or
+               ((A^.City <> D^.City) and (B^.City <> C^.City)) then
+            begin
+              IsThreeConnected := True;
+              Exit;
+            end;
+          end;
+          
+          D := D^.Next;
+        end;
+        
+        C := C^.Next;
+      end;
+      
+      B := B^.Next;
+    end;
+    
+    A := A^.Next;
+  end;
+  
+  IsThreeConnected := False;
+end;
+
+procedure AddRoad(var roads: NodePtr; city: Char);
+var
+  newNode: NodePtr;
+begin
+  New(newNode);
+  newNode^.City := city;
+  newNode^.Next := roads;
+  roads := newNode;
+end;
+
+procedure FreeList(var roads: NodePtr);
+var
+  temp: NodePtr;
+begin
+  while roads <> nil do
+  begin
+    temp := roads;
+    roads := roads^.Next;
+    Dispose(temp);
+  end;
+end;
+
+var
+  roads: NodePtr;
+begin
+  roads := nil;
+  
+  { Пример системы двусторонних дорог }
+  AddRoad(roads, 'A');
+  AddRoad(roads, 'B');
+  AddRoad(roads, 'C');
+  AddRoad(roads, 'D');
+  AddRoad(roads, 'D');  // Добавляем дополнительную дорогу от A к D
+  AddRoad(roads, 'C');  // Добавляем дополнительную дорогу от B к C
+  
+  { Вызов функции для проверки трехсвязности }
+  if IsThreeConnected(roads) then
+    WriteLn('Система двусторонних дорог является трехсвязной.')
+  else
+    WriteLn('Система двусторонних дорог не является трехсвязной.');
+    
+  FreeList(roads);
+end.

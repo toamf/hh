@@ -1,0 +1,132 @@
+#include <iostream>
+#include <cstdlib>
+#include <ctime>
+
+using namespace std;
+
+const int MAX_SIZE = 10;
+
+class Deque {
+private:
+    int left;
+    int right;
+    int size_;
+    int data[MAX_SIZE];
+
+public:
+    Deque() {
+        left = 0;
+        right = -1;
+        size_ = 0;
+    }
+
+    void push_front(int value) {
+        if (size_ == MAX_SIZE) {
+            cout << "Дек полон" << endl;
+            return;
+        }
+        left = (left - 1 + MAX_SIZE) % MAX_SIZE;
+        data[left] = value;
+        size_++;
+    }
+
+    void push_back(int value) {
+        if (size_ == MAX_SIZE) {
+            cout << "Дек полон" << endl;
+            return;
+        }
+        right = (right + 1) % MAX_SIZE;
+        data[right] = value;
+        size_++;
+    }
+
+    int pop_front() {
+        if (size_ == 0) {
+            cout << "Дек пуст" << endl;
+            return -1;
+        }
+        int value = data[left];
+        left = (left + 1) % MAX_SIZE;
+        size_--;
+        return value;
+    }
+
+    int pop_back() {
+        if (size_ == 0) {
+            cout << "Дек пуст" << endl;
+            return -1;
+        }
+        int value = data[right];
+        right = (right - 1 + MAX_SIZE) % MAX_SIZE;
+        size_--;
+        return value;
+    }
+
+    int front() {
+        if (size_ == 0) {
+            cout << "Дек пуст" << endl;
+            return -1;
+        }
+        return data[left];
+    }
+
+    int back() {
+        if (size_ == 0) {
+            cout << "Дек пуст" << endl;
+            return -1;
+        }
+        return data[right];
+    }
+
+    bool empty() {
+        return (size_ == 0);
+    }
+
+    int size() {
+        return size_;
+    }
+};
+
+int main() {
+    setlocale(LC_ALL, "Russian");
+    int nominal_volume, initial_volume, coffee_left;
+    cout << "Введите номинальный объем банки: ";
+    cin >> nominal_volume;
+    cout << "Введите начальный объем кофе в развесочном автомате: ";
+    cin >> initial_volume;
+    coffee_left = initial_volume;
+    Deque conveyor_belts;
+
+    srand(time(NULL));
+
+    while (coffee_left > 0) {
+        int filled_volume = nominal_volume + (rand() % 10) - 5; // adding some error
+        if (filled_volume <= coffee_left) {
+            conveyor_belts.push_front(filled_volume);
+            coffee_left -= filled_volume;
+            cout << filled_volume << " мл кофе, залито в банку" << endl;
+        } else {
+            cout << "Недостаточно кофе, чтобы заполнить банку" << endl;
+            break;
+        }
+
+        if (!conveyor_belts.empty() && conveyor_belts.front() < nominal_volume) {
+            int removed_volume = conveyor_belts.pop_front();
+            coffee_left += removed_volume;
+            cout << "Банка с " << removed_volume << " мл кофе удаляется с конвейера и возвращается в автомат" << endl;
+        }
+
+        if (conveyor_belts.size() == MAX_SIZE && !conveyor_belts.empty() && conveyor_belts.back() >= nominal_volume) {
+            int sent_volume = conveyor_belts.pop_back();
+            cout << "Банка с " << sent_volume << " мл кофе отправлено на склад" << endl;
+        }
+    }
+
+    while (!conveyor_belts.empty()) {
+        int sent_volume = conveyor_belts.pop_back();
+        cout << "Банка с " << sent_volume << " мл кофе отправлено на склад" << endl;
+    }
+
+    cout << "Все банки отправлены на склад" << endl;
+    return 0;
+}
