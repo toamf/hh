@@ -1,0 +1,162 @@
+program ArrayProcessing
+    implicit none
+    
+    integer, parameter :: MAX_SIZE = 100
+    integer :: array(MAX_SIZE)
+    integer :: count, maxCount, i, maxValue, k
+    character(len=100) :: fileName
+    integer, dimension(MAX_SIZE) :: resultArray
+    
+    ! Ввод имени файла
+    write(*,*) "Введите имя файла:"
+    read(*,*) fileName
+    
+    ! Открытие файла
+    open(10, file=trim(fileName), status='old')
+    
+    ! Чтение элементов из файла
+    count = 0
+    do
+        read(10, *, iostat=i) array(count+1)
+        if (i /= 0) exit
+        count = count + 1
+        if (count >= MAX_SIZE) exit
+    end do
+    
+    ! Закрытие файла
+    close(10)
+    
+    ! Вывод исходного массива по K элементов построчно
+    write(*,*) "Введите K:"
+    read(*,*) k
+    
+    do i = 1, min(k, count)
+        write(*,*) array(i)
+    end do
+    
+    ! Поиск максимального значения и подсчет количества элементов равных максимальному
+    maxValue = array(1)
+    maxCount = 1
+    
+    do i = 2, count
+        if (array(i) > maxValue) then
+            maxValue = array(i)
+            maxCount = 1
+        else if (array(i) == maxValue) then
+            maxCount = maxCount + 1
+        end if
+    end do
+    
+    ! Вывод результирующего массива в строку
+    write(*,*) "Результирующий массив:"
+    do i = 1, count
+        if (array(i) == maxValue) then
+            resultArray(i) = i
+        else
+            resultArray(i) = -1
+        end if
+    end do
+    
+    do i = 1, count
+        write(*, '(i3)', advance='no') resultArray(i)
+    end do
+    
+    write(*,*)
+    
+end program ArrayProcessing
+
+
+
+
+
+7
+3
+9
+2
+4
+9
+1
+5
+9
+6
+
+
+
+
+
+ 
+
+
+
+
+program MatrixProcessing
+    implicit none
+
+    integer, parameter :: MAX_SIZE = 100
+    integer :: matrix(MAX_SIZE, MAX_SIZE)
+    integer :: vector(MAX_SIZE)
+    integer :: N, M, i, j, k
+
+    ! Ввод размерностей матрицы
+    write(*,*) "Введите количество строк (N):"
+    read(*,*) N
+    write(*,*) "Введите количество столбцов (M):"
+    read(*,*) M
+
+    ! Проверка на допустимые размеры матрицы
+    if (N > MAX_SIZE .or. M > MAX_SIZE) then
+        write(*,*) "Превышен максимальный размер матрицы."
+        stop
+    end if
+
+    ! Ввод элементов матрицы
+    write(*,*) "Введите элементы матрицы по элементам строк:"
+    do i = 1, N
+        do j = 1, M
+            read(*,*) matrix(i, j)
+        end do
+    end do
+
+    ! Вывод исходной матрицы
+    write(*,*) "Исходная матрица:"
+    do i = 1, N
+        do j = 1, M
+            write(*, '(i3)', advance='no') matrix(i, j)
+        end do
+        write(*,*)
+    end do
+
+    ! Формирование вектора из элементов верхней треугольной матрицы
+    k = 0
+    do i = 1, N
+        do j = i, M
+            k = k + 1
+            vector(k) = matrix(i, j)
+        end do
+    end do
+
+    ! Вывод полученного вектора в виде треугольника
+    write(*,*) "Полученный вектор в виде треугольника:"
+    k = 0
+    do i = 1, N
+        do j = 1, i
+            k = k + 1
+            write(*, '(i3)', advance='no') vector(k)
+        end do
+        write(*,*)
+    end do
+
+end program MatrixProcessing
+
+
+
+
+
+
+
+
+
+
+
+
+
