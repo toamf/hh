@@ -1,0 +1,50 @@
+[
+  {
+    "id": 0,
+    "name": "bibi",
+    "coordinates": {
+      "x": 0,
+      "y": 0
+    },
+    "creationDate": "2023-03-15T18:29:18.2992795+03:00[Europe/Moscow]",
+    "age": 123112312,
+    "color": "BLUE",
+    "type": "AIR",
+    "character": "WISE",
+    "cave": {
+      "depth": 241525.0
+    }
+  },
+  {
+    "id": 3,
+    "name": "bibi",
+    "coordinates": {
+      "x": 0,
+      "y": 0
+    },
+    "creationDate": "2023-04-15T18:29:18.2992795+03:00[Europe/Moscow]",
+    "age": 123112312,
+    "color": "BLUE",
+    "type": "AIR",
+    "character": "WISE",
+    "cave": {
+      "depth": 241525.0
+    }
+  },
+  {
+    "id": 4,
+    "name": "cdc",
+    "coordinates": {
+      "x": 1,
+      "y": 1
+    },
+    "creationDate": "2023-09-06T18:46:10.080597+03:00[Europe/Moscow]",
+    "age": 11,
+    "color": "GREEN",
+    "type": "AIR",
+    "character": "EVIL",
+    "cave": {
+      "depth": 1.0
+    }
+  }
+]

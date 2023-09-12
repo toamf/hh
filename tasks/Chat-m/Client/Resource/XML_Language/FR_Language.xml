@@ -1,0 +1,355 @@
+<?xml version = "1.0" encoding="UTF-8" ?>
+<FR_Language>
+	<Screen w="login">	
+		<item>
+			<line>username_enter</line>
+			<value>Login</value>
+		</item>
+		<item>
+			<line>pass_enter</line>
+			<value>Mot de passe</value>
+		</item>
+		<item>
+			<line>error_label</line>
+			<value>Nom d'utilisateur ou mot de passe incorrect</value>
+		</item>
+		<item>
+			<line>reg_button</line>
+			<value>Enregistrement</value>
+		</item>
+		<item>
+			<line>log_in</line>
+			<value>Entrée</value>
+		</item>
+		<item>
+			<line>errorconnect_label</line>
+			<value>Erreur de connexion</value>
+		</item>
+	</Screen>
+
+	<Screen w="register">
+		<item>
+			<line>register_2</line>
+			<value>ENREGISTREMENT</value>
+		</item>	
+		<item>
+			<line>username</line>
+			<value>Votre nom:</value>
+		</item>
+		<item>
+			<line>sex</line>
+			<value>Sexe:</value>
+		</item>
+		<item>
+			<line>sex_person</line>
+			<value>Unknown, Homme, Femme</value>
+		</item>
+		<item>
+			<line>age</line>
+			<value>Âge:</value>
+		</item>
+		<item>
+			<line>city</line>
+			<value>Ville:</value>
+		</item>
+		<item>
+			<line>password</line>
+			<value>Mot de passe:</value>
+		</item>
+		<item>
+			<line>confirm</line>
+			<value>Confirmation:</value>
+		</item>
+		<item>
+			<line>Error_label</line>
+			<value>Erreur .. Nom existe déjà.</value>
+		</item>
+		<item>
+			<line>accept_button</line>
+			<value>ACCEPTER</value>
+		</item>
+		<item>
+			<line>errors1</line>
+			<value> Erreur.. Entrez votre nom d'utilisateur et mot de passe. // Erreur.. nom existe déjà. // Erreur.. Les mots de passe ne correspondent pas. // Erreur .. Confirmer mot de passe.
+			</value>
+		</item>
+	</Screen>
+
+	<Screen w="confirm">	
+		<item>
+			<line>cancel_Button_conf</line>
+			<value>ANNULER</value>
+		</item>
+		<item>
+			<line>ok_Button</line>
+			<value>ACCEPTER</value>
+		</item>
+		<item>
+			<line>conf_message_del_hist</line>
+			<value>Êtes-vous sûr de vouloir effacer l'historique?</value>
+		</item>
+		<item>
+			<line>conf_message_del_user</line>
+			<value>Êtes-vous sûr de vouloir supprimer cet utilisateur?</value>
+		</item>
+	</Screen>
+
+	<Screen w="creategroup">	
+		<item>
+			<line>g_name</line>
+			<value>Nom de groupe</value>
+		</item>
+		<item>
+			<line>g_description</line>
+			<value>Description</value>
+		</item>
+		<item>
+			<line>close_groupW</line>
+			<value>ANNULER</value>
+		</item>
+		<item>
+			<line>create_group</line>
+			<value>PUIS</value>
+		</item>
+	</Screen>
+
+	<Screen w="find">	
+		<item>
+			<line>add_user</line>
+			<value>Ajouter un utilisateur:</value>
+		</item>
+		<item>
+			<line>username_lineedit</line>
+			<value>Nom d'utilisateur</value>
+		</item>
+		<item>
+			<line>invite_cont_button</line>
+			<value>Ajouter</value>
+		</item>
+		<item>
+			<line>errors</line>
+			<value>Vous ne pouvez pas ajouter vous-même.. // Utilisateur introuvable.. // Utilisateur déjà ajouté..</value>
+		</item>
+	</Screen>
+
+	<Screen w="select">	
+		<item>
+			<line>members</line>
+			<value>Participants:</value>
+		</item>
+		<item>
+			<line>crGroup_button</line>
+			<value>CREATE</value>
+		</item>
+		<item>
+			<line>cancel_button</line>
+			<value>ANNULER</value>
+		</item>
+	</Screen>
+
+	<Screen w="choicecreate">	
+		<item>
+			<line>newContact</line>
+			<value>Ajouter un utilisateur</value>
+		</item>
+		<item>
+			<line>newGroup</line>
+			<value>Créer un groupe</value>
+		</item>
+		<item>
+			<line>close_choice</line>
+			<value>ANNULER</value>
+		</item>
+		<item>
+			<line>next_choice</line>
+			<value>PUIS</value>
+		</item>
+		<item>
+			<line>contact_descr</line>
+			<value>Ajouter un nouvel utilisateur à votre liste d'amis</value>
+		</item>
+		<item>
+			<line>group_descr</line>
+			<value>Créer un espace de dialogue collective</value>
+		</item>
+	</Screen>
+	<Screen w="setting">	
+		<item>
+			<line>start_sys</line>
+			<value>Chargement au lancement</value>
+		</item>
+		<item>
+			<line>language</line>
+			<value>Langue de: </value>
+		</item>
+		<item>
+			<line>down_path</line>
+			<value>Le chemin d'amorçage: </value>
+		</item>
+		<item>
+			<line>Download_path_PB</line>
+			<value>Modifier</value>
+		</item>
+		<item>
+			<line>RB_sendEnter</line>
+			<value>Envoyer à "Entrée"</value>
+		</item>
+		<item>
+			<line>RB_send_CEnter</line>
+			<value>Envoyer à "Ctrl + Entrée"</value>
+		</item>
+		<item>
+			<line>ChBox_Notif</line>
+			<value>Notification</value>
+		</item>
+		<item>
+			<line>ChBox_PSound</line>
+			<value>Le son</value>
+		</item>
+		<item>
+			<line>background</line>
+			<value>Sélection de l'fond:</value>
+		</item>
+		<item>
+			<line>PB_SelColor</line>
+			<value>Choisir de palette:</value>
+		</item>
+		<item>
+			<line>PB_LoadFileBackground</line>
+			<value>Télécharger un fichier:</value>
+		</item>
+		<item>
+			<line>username_label</line>
+			<value>Nom d'utilisateur: </value>
+		</item>
+		<item>
+			<line>radioButton</line>
+			<value>Par défaut</value>
+		</item>
+		<item>
+			<line>radioButton_2</line>
+			<value>Download</value>
+		</item>
+		<item>
+			<line>groupBox</line>
+			<value>Image:</value>
+		</item>
+		<item>
+			<line>userList_3</line>
+			<value>Profil, Principal, Options du Chat, Networking</value>
+		</item>
+		<item>
+			<line>search_line_edit</line>
+			<value>Recherche en</value>
+		</item>
+		<item>
+			<line>editText</line>
+			<value>Inscris ton message..</value>
+		</item>
+		<item>
+			<line>start_textBrowser</line>
+			<value>S'il vous plaît sélectionner un dialogue pour démarrer le dialogue ou ajouter de nouveaux amis!</value>
+		</item>
+	</Screen>
+
+	<Screen w="date/time">
+		<item>
+			<line>was_yesterday</line>
+			<value>Est venu hier en </value>
+		</item>
+		<item>
+			<line>was_today</line>
+			<value>Est venu aujourd'hui en </value>
+		</item>
+		<item>
+			<line>was_online</line>
+			<value> sur le réseau </value>
+		</item>
+		<item>
+			<line>ago</line>
+			<value> il ya</value>
+		</item>
+		<item>
+			<line>she_was</line>
+			<value>Elle était</value>
+		</item>
+		<item>
+			<line>he_was</line>
+			<value>Il était</value>
+		</item>
+		<item>
+			<line>days</line>
+			<value>journées</value>
+		</item>
+		<item>
+			<line>day</line>
+			<value>jour</value>
+		</item>
+		<item>
+			<line>of_the_day</line>
+			<value>jour</value>
+		</item>
+	</Screen>
+
+	<Screen w="other">	
+		<item>
+			<line>ContextDelUser</line>
+			<value>Supprimer l'utilisateur</value>
+		</item>
+		<item>
+			<line>ContextClearSelection</line>
+			<value>Désélectionner</value>
+		</item>
+		<item>
+			<line>ContextClearHistory</line>
+			<value>Effacer l'historique</value>
+		</item>
+		<item>
+			<line>fileWindow</line>
+			<value>Selektearje triem te stjoeren</value>
+		</item>
+		<item>
+			<line>SelectImages</line>
+			<value>Selektearje image</value>
+		</item>
+		<item>
+			<line>NewGroup_msg</line>
+			<value>Jo hawwe dien in nije groep dialooch</value>
+		</item>
+		<item>
+			<line>notice_msg</line>
+			<value>New post</value>
+		</item>
+		<item>
+			<line>File</line>
+			<value>Triem</value>
+		</item>
+		<item>
+			<line>Ad_User</line>
+			<value>Jo tafoege brûker</value>
+		</item>
+		<item>
+			<line>Invate_msg</line>
+			<value>Hey, lit my foegje jo nei har kontakt list?</value>
+		</item>
+	</Screen>
+
+	<Screen w="error">
+		<item>
+			<line>Disconnected_1</line>
+			<value>Ferlies fan ferbining mei de tsjinner.</value>
+		</item>
+		<item>
+			<line>ServerNF</line>
+			<value>Tsjinner net fûn. \nTink bieden jo korrekte adres en poarte fan 'e tsjinner.</value>
+		</item>
+		<item>
+			<line>Disconnected_2</line>
+			<value>De ferbining waard beëinige wurde troch de kliînt.</value>
+		</item>
+		<item>
+			<line>Occurred_err</line>
+			<value>De folgjende fout die him foar: </value>
+		</item>
+	</Screen>	
+</FR_Language>

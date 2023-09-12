@@ -1,0 +1,363 @@
+<?xml version = "1.0" encoding="UTF-8" ?>
+<RU_Language>
+	<Screen w="login">	
+		<item>
+			<line>username_enter</line>
+			<value>Логин</value>
+		</item>
+		<item>
+			<line>pass_enter</line>
+			<value>Пароль</value>
+		</item>
+		<item>
+			<line>error_label</line>
+			<value>Неправильный логин или пароль</value>
+		</item>
+		<item>
+			<line>reg_button</line>
+			<value>Регистрация</value>
+		</item>
+		<item>
+			<line>log_in</line>
+			<value>Вход</value>
+		</item>
+		<item>
+			<line>errorconnect_label</line>
+			<value>Ошибка соединения</value>
+		</item>
+	</Screen>
+
+	<Screen w="register">
+		<item>
+			<line>register_2</line>
+			<value>РЕГИСТРАЦИЯ</value>
+		</item>	
+		<item>
+			<line>username</line>
+			<value>Ваше имя:</value>
+		</item>
+		<item>
+			<line>sex</line>
+			<value>Пол:</value>
+		</item>
+		<item>
+			<line>sex_person</line>
+			<value>Неизвестно,Мужчина,Женщина</value>
+		</item>
+		<item>
+			<line>age</line>
+			<value>Возраст:</value>
+		</item>
+		<item>
+			<line>city</line>
+			<value>Город:</value>
+		</item>
+		<item>
+			<line>password</line>
+			<value>Пароль:</value>
+		</item>
+		<item>
+			<line>confirm</line>
+			<value>Подтверждение:</value>
+		</item>
+		<item>
+			<line>Error_label</line>
+			<value>Ошибка.. Имя уже существует.</value>
+		</item>
+		<item>
+			<line>accept_button</line>
+			<value>Зарегистрироваться</value>
+		</item>
+		<item>
+			<line>errors1</line>
+			<value> Ошибка.. Введите имя пользователя и пароль. // Ошибка.. Имя уже существует. // Ошибка.. Пароли не совпадают. // Ошибка.. Подтвердите пароль. 
+			</value>
+		</item>
+	</Screen>
+
+	<Screen w="confirm">	
+		<item>
+			<line>cancel_Button_conf</line>
+			<value>ОТМЕНА</value>
+		</item>
+		<item>
+			<line>ok_Button</line>
+			<value>ПОДТВЕРДИТЬ</value>
+		</item>
+		<item>
+			<line>conf_message_del_hist</line>
+			<value>Вы уверены, что хотите очистить историю?</value>
+		</item>
+		<item>
+			<line>conf_message_del_user</line>
+			<value>Вы уверены, что хотите удалить этого пользователя?</value>
+		</item>
+	</Screen>
+
+	<Screen w="creategroup">	
+		<item>
+			<line>g_name</line>
+			<value>Название группы</value>
+		</item>
+		<item>
+			<line>g_description</line>
+			<value>Описание</value>
+		</item>
+		<item>
+			<line>close_groupW</line>
+			<value>ОТМЕНА</value>
+		</item>
+		<item>
+			<line>create_group</line>
+			<value>ДАЛЕЕ</value>
+		</item>
+	</Screen>
+
+	<Screen w="find">	
+		<item>
+			<line>add_user</line>
+			<value>Добавить пользователя:</value>
+		</item>
+		<item>
+			<line>username_lineedit</line>
+			<value>Имя пользователя</value>
+		</item>
+		<item>
+			<line>invite_cont_button</line>
+			<value>Добавить</value>
+		</item>
+		<item>
+			<line>errors</line>
+			<value>Вы не можете добавить себя.. //Пользователь не найден.. //Пользователь уже добавлен.. </value>
+		</item>
+	</Screen>
+
+	<Screen w="select">	
+		<item>
+			<line>count_member</line>
+			<value>Участники:</value>
+		</item>
+		<item>
+			<line>crGroup_button</line>
+			<value>СОЗДАТЬ</value>
+		</item>
+		<item>
+			<line>cancel_button</line>
+			<value>ОТМЕНА</value>
+		</item>
+	</Screen>
+
+	<Screen w="choicecreate">	
+		<item>
+			<line>newContact</line>
+			<value>Добавить пользователя</value>
+		</item>
+		<item>
+			<line>newGroup</line>
+			<value>Создать группу</value>
+		</item>
+		<item>
+			<line>close_choice</line>
+			<value>ОТМЕНА</value>
+		</item>
+		<item>
+			<line>next_choice</line>
+			<value>ДАЛЕЕ</value>
+		</item>
+		<item>
+			<line>contact_descr</line>
+			<value>Добавить нового пользователя в список друзей</value>
+		</item>
+		<item>
+			<line>group_descr</line>
+			<value>Создать комнату для коллективного общения</value>
+		</item>
+	</Screen>
+ 	
+	<Screen w="setting">	
+		<item>
+			<line>start_sys</line>
+			<value>Загрузка при старте системы</value>
+		</item>
+		<item>
+			<line>language</line>
+			<value>Язык: </value>
+		</item>
+		<item>
+			<line>down_path</line>
+			<value>Загрузочный путь: </value>
+		</item>
+		<item>
+			<line>Download_path_PB</line>
+			<value>Изменить</value>
+		</item>
+		<item>
+			<line>RB_sendEnter</line>
+			<value>Отправка по "Enter"</value>
+		</item>
+		<item>
+			<line>RB_send_CEnter</line>
+			<value>Отправка по "Ctrl + Enter"</value>
+		</item>
+		<item>
+			<line>ChBox_Notif</line>
+			<value>Уведомления</value>
+		</item>
+		<item>
+			<line>ChBox_PSound</line>
+			<value>Звук</value>
+		</item>
+		<item>
+			<line>background</line>
+			<value>Выбор фона:</value>
+		</item>
+		<item>
+			<line>PB_SelColor</line>
+			<value>Выбрать из палитры:</value>
+		</item>
+		<item>
+			<line>PB_LoadFileBackground</line>
+			<value>Загрузить из файла:</value>
+		</item>
+		<item>
+			<line>username_label</line>
+			<value>Имя пользователя: </value>
+		</item>
+		<item>
+			<line>radioButton</line>
+			<value>По умолчанию</value>
+		</item>
+		<item>
+			<line>radioButton_2</line>
+			<value>Загрузить</value>
+		</item>
+		<item>
+			<line>groupBox</line>
+			<value>Аватар:</value>
+		</item>
+		<item>
+			<line>userList_3</line>
+			<value>Профиль, Основное, Опции чата, Сеть</value>
+		</item>
+		<item>
+			<line>search_line_edit</line>
+			<value>Поиск</value>
+		</item>
+		<item>
+			<line>editText</line>
+			<value>Введите сообщение..</value>
+		</item>
+		<item>
+			<line>start_textBrowser</line>
+			<value>Пожалуйста, выберите диалог, чтобы начать общение или добавьте новых друзей!</value>
+		</item>
+	</Screen>
+
+	<Screen w="date/time">
+		<item>
+			<line>was_yesterday</line>
+			<value>Заходил вчера в </value>
+		</item>
+		<item>
+			<line>was_today</line>
+			<value>Заходил сегодня в </value>
+		</item>
+		<item>
+			<line>was_online</line>
+			<value> в сети </value>
+		</item>
+		<item>
+			<line>was_online</line>
+			<value> в сети </value>
+		</item>
+		<item>
+			<line>ago</line>
+			<value> назад</value>
+		</item>
+		<item>
+			<line>she_was</line>
+			<value>Была</value>
+		</item>
+		<item>
+			<line>he_was</line>
+			<value>Был</value>
+		</item>
+		<item>
+			<line>days</line>
+			<value>дней</value>
+		</item>
+		<item>
+			<line>day</line>
+			<value>день</value>
+		</item>
+		<item>
+			<line>of_the_day</line>
+			<value>дня</value>
+		</item>
+	</Screen>
+	
+	<Screen w="other">	
+		<item>
+			<line>ContextDelUser</line>
+			<value>Удалить пользователя</value>
+		</item>
+		<item>
+			<line>ContextClearSelection</line>
+			<value>Отменить выделение</value>
+		</item>
+		<item>
+			<line>ContextClearHistory</line>
+			<value>Очистить историю</value>
+		</item>
+		<item>
+			<line>fileWindow</line>
+			<value>Выбор файла для отправки</value>
+		</item>
+		<item>
+			<line>SelectImages</line>
+			<value>Выбор изображения</value>
+		</item>
+		<item>
+			<line>NewGroup_msg</line>
+			<value>Вы создали новый групповой диалог</value>
+		</item>
+		<item>
+			<line>notice_msg</line>
+			<value>Новое сообщение</value>
+		</item>
+		<item>
+			<line>File</line>
+			<value>Файл</value>
+		</item>
+		<item>
+			<line>Ad_User</line>
+			<value>Вы добавили пользователя</value>
+		</item>
+		<item>
+			<line>Invate_msg</line>
+			<value>Привет, позвольте мне добавить вас в список контактов?</value>
+		</item>
+	</Screen>
+
+	<Screen w="error">
+		<item>
+			<line>Disconnected_1</line>
+			<value>Потеря соединения с сервером.</value>
+		</item>
+		<item>
+			<line>ServerNF</line>
+			<value>Сервер не найден. \nПожалуйста, укажите правильный адрес и порт сервера.</value>
+		</item>
+		<item>
+			<line>Disconnected_2</line>
+			<value>Соединение было разорвано клиентом.</value>
+		</item>
+		<item>
+			<line>Occurred_err</line>
+			<value>Произошла следующая ошибка: </value>
+		</item>
+	</Screen>	
+</RU_Language>
+
+	
+	
