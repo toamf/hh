@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Веб форма</title>
+</head>
+<body>
+    <form>
+        <label for="city">Город:</label>
+        <select id="city" onchange="updateWorkshop()">
+        </select>
+
+        <label for="workshop">Цех:</label>
+        <select id="workshop" onchange="updateEmployee()">
+        </select>
+
+        <label for="employee">Сотрудник:</label>
+        <select id="employee">
+        </select>
+
+        <label for="brigade">Бригада:</label>
+        <select id="brigade">
+        </select>
+
+        <label for="shift">Смена:</label>
+        <input type="number" id="shift" name="shift">
+    </form>
+
+    <script src="script.js"></script>
+</body>
+</html>
