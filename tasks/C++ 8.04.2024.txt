@@ -1,0 +1,41 @@
+#include <iostream>
+#include <map>
+#include <stack>
+#include <string>
+
+int main() {
+    std::map<std::string, int> variables; 
+    std::stack<std::pair<std::string, int>> changes; 
+    std::string line;
+
+    while (std::getline(std::cin, line)) {
+        if (line == "{") {
+            changes.push({"", 0});
+        } else if (line == "}") {
+            while (!changes.empty() && changes.top().first != "") {
+                variables[changes.top().first] = changes.top().second; 
+                changes.pop();
+            }
+            if (!changes.empty()) changes.pop(); 
+        } else {
+            auto eqPos = line.find('=');
+            std::string var1 = line.substr(0, eqPos);
+            std::string var2 = line.substr(eqPos + 1);
+
+            if (isdigit(var2[0]) || var2[0] == '-') {
+                if (changes.empty() || changes.top().first != var1) {
+                    changes.push({var1, variables[var1]});
+                }
+                variables[var1] = std::stoi(var2);
+            } else {
+                std::cout << variables[var2] << std::endl;
+                if (changes.empty() || changes.top().first != var1) {
+                    changes.push({var1, variables[var1]});
+                }
+                variables[var1] = variables[var2];
+            }
+        }
+    }
+
+    return 0;
+}
