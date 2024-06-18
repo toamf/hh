@@ -1,0 +1,253 @@
+#include <iostream>
+#include <vector>
+#include <string>
+#include <algorithm>
+#include <iomanip>
+
+using namespace std;
+
+class Student {
+public:
+    string surname;
+    string name;
+    string patronymic;
+    int birthDay;
+    int birthMonth;
+    int birthYear;
+    int admissionYear;
+    string faculty;
+    string department;
+    string group;
+    string recordBookNumber;
+    string gender;
+    vector<pair<string, int>> grades; // пара предмет-оценка для каждой сессии
+
+    Student() = default;
+
+    Student(string surname, string name, string patronymic, int birthDay, int birthMonth, int birthYear,
+            int admissionYear, string faculty, string department, string group, string recordBookNumber, string gender)
+            : surname(move(surname)), name(move(name)), patronymic(move(patronymic)), birthDay(birthDay),
+              birthMonth(birthMonth), birthYear(birthYear), admissionYear(admissionYear), faculty(move(faculty)),
+              department(move(department)), group(move(group)), recordBookNumber(move(recordBookNumber)),
+              gender(move(gender)) {}
+
+    void addGrade(const string& subject, int grade) {
+        grades.emplace_back(subject, grade);
+    }
+
+    bool hasLowPercentageOfThrees() const {
+        int totalGrades = grades.size();
+        int countThrees = count_if(grades.begin(), grades.end(), [](const pair<string, int>& grade) {
+            return grade.second == 3;
+        });
+
+        return (countThrees <= 0.25 * totalGrades);
+    }
+
+    void print() const {
+        cout << "Ф.И.О.: " << surname << " " << name << " " << patronymic << "\n"
+             << "Дата рождения: " << birthDay << "." << birthMonth << "." << birthYear << "\n"
+             << "Год поступления: " << admissionYear << "\n"
+             << "Факультет: " << faculty << "\n"
+             << "Кафедра: " << department << "\n"
+             << "Группа: " << group << "\n"
+             << "Номер зачетной книжки: " << recordBookNumber << "\n"
+             << "Пол: " << gender << "\n"
+             << "Оценки:\n";
+
+        for (const auto& grade : grades) {
+            cout << grade.first << ": " << grade.second << "\n";
+        }
+
+        cout << "--------------------------------------\n";
+    }
+};
+
+class StudentDatabase {
+private:
+    vector<Student> students;
+
+public:
+    void addStudent(const Student& student) {
+        students.push_back(student);
+    }
+
+    void deleteStudent(const string& recordBookNumber) {
+        students.erase(remove_if(students.begin(), students.end(),
+                                 [&recordBookNumber](const Student& student) {
+                                     return student.recordBookNumber == recordBookNumber;
+                                 }), students.end());
+    }
+
+    void editStudent(const string& recordBookNumber, const Student& updatedStudent) {
+        auto it = find_if(students.begin(), students.end(),
+                          [&recordBookNumber](const Student& student) {
+                              return student.recordBookNumber == recordBookNumber;
+                          });
+
+        if (it != students.end()) {
+            *it = updatedStudent;
+        }
+    }
+
+    void printAllStudents() const {
+        for (const auto& student : students) {
+            student.print();
+        }
+    }
+
+    void printStudentsByBirthYearRange(int startYear, int endYear) const {
+        for (const auto& student : students) {
+            if (student.birthYear >= startYear && student.birthYear <= endYear) {
+                student.print();
+            }
+        }
+    }
+
+    void printStudentsWithLowThrees() const {
+        for (const auto& student : students) {
+            if (student.hasLowPercentageOfThrees()) {
+                student.print();
+            }
+        }
+    }
+};
+
+int main() {
+    setlocale(LC_ALL, "Russian");
+    StudentDatabase db;
+    int choice;
+
+    do {
+        cout << "1. Добавить студента\n";
+        cout << "2. Удалить студента\n";
+        cout << "3. Изменить студента\n";
+        cout << "4. Показать всех студентов\n";
+        cout << "5. Показать студентов по году рождения\n";
+        cout << "6. Показать студентов с менее чем 25% троек\n";
+        cout << "7. Выход\n";
+        cout << "Выберите опцию: ";
+        cin >> choice;
+
+        if (choice == 1) {
+            // Ввод данных студента и добавление его в базу
+            string surname, name, patronymic, faculty, department, group, recordBookNumber, gender;
+            int birthDay, birthMonth, birthYear, admissionYear;
+            cout << "Введите фамилию: ";
+            cin >> surname;
+            cout << "Введите имя: ";
+            cin >> name;
+            cout << "Введите отчество: ";
+            cin >> patronymic;
+            cout << "Введите день рождения: ";
+            cin >> birthDay;
+            cout << "Введите месяц рождения: ";
+            cin >> birthMonth;
+            cout << "Введите год рождения: ";
+            cin >> birthYear;
+            cout << "Введите год поступления: ";
+            cin >> admissionYear;
+            cout << "Введите факультет: ";
+            cin >> faculty;
+            cout << "Введите кафедру: ";
+            cin >> department;
+            cout << "Введите группу: ";
+            cin >> group;
+            cout << "Введите номер зачетной книжки: ";
+            cin >> recordBookNumber;
+            cout << "Введите пол: ";
+            cin >> gender;
+
+            Student student(surname, name, patronymic, birthDay, birthMonth, birthYear, admissionYear,
+                            faculty, department, group, recordBookNumber, gender);
+
+            // Ввод оценок студента
+            int sessionCount;
+            cout << "Введите количество сессий: ";
+            cin >> sessionCount;
+            for (int i = 0; i < sessionCount; ++i) {
+                string subject;
+                int grade;
+                cout << "Введите предмет: ";
+                cin >> subject;
+                cout << "Введите оценку: ";
+                cin >> grade;
+                student.addGrade(subject, grade);
+            }
+
+            db.addStudent(student);
+        } else if (choice == 2) {
+            // Удаление студента
+            string recordBookNumber;
+            cout << "Введите номер зачетной книжки студента для удаления: ";
+            cin >> recordBookNumber;
+            db.deleteStudent(recordBookNumber);
+        } else if (choice == 3) {
+            // Изменение данных студента
+            string recordBookNumber;
+            cout << "Введите номер зачетной книжки студента для изменения: ";
+            cin >> recordBookNumber;
+
+            // Ввод новых данных студента
+            string surname, name, patronymic, faculty, department, group, gender;
+            int birthDay, birthMonth, birthYear, admissionYear;
+            cout << "Введите фамилию: ";
+            cin >> surname;
+            cout << "Введите имя: ";
+            cin >> name;
+            cout << "Введите отчество: ";
+            cin >> patronymic;
+            cout << "Введите день рождения: ";
+            cin >> birthDay;
+            cout << "Введите месяц рождения: ";
+            cin >> birthMonth;
+            cout << "Введите год рождения: ";
+            cin >> birthYear;
+            cout << "Введите год поступления: ";
+            cin >> admissionYear;
+            cout << "Введите факультет: ";
+            cin >> faculty;
+            cout << "Введите кафедру: ";
+            cin >> department;
+            cout << "Введите группу: ";
+            cin >> group;
+            cout << "Введите пол: ";
+            cin >> gender;
+
+            Student updatedStudent(surname, name, patronymic, birthDay, birthMonth, birthYear, admissionYear,
+                                   faculty, department, group, recordBookNumber, gender);
+
+            // Ввод новых оценок студента
+            int sessionCount;
+            cout << "Введите количество сессий: ";
+            cin >> sessionCount;
+            for (int i = 0; i < sessionCount; ++i) {
+                string subject;
+                int grade;
+                cout << "Введите предмет: ";
+                cin >> subject;
+                cout << "Введите оценку: ";
+                cin >> grade;
+                updatedStudent.addGrade(subject, grade);
+            }
+
+            db.editStudent(recordBookNumber, updatedStudent);
+        } else if (choice == 4) {
+            // Печать всех студентов
+            db.printAllStudents();
+        } else if (choice == 5) {
+            // Печать студентов по году рождения
+            int startYear, endYear;
+            cout << "Введите начальный год: ";
+            cin >> startYear;
+            cout << "Введите конечный год: ";
+            cin >> endYear;
+            db.printStudentsByBirthYearRange(startYear, endYear);
+        } else if (choice == 6) {
+            // Печать студентов с менее чем 25% троек
+            db.printStudentsWithLowThrees();
+        }
+    } while (choice != 7);
+
+    return 0;
+}
